@@ -1,0 +1,34 @@
+@startuml
+package "Subscriptions Manager" {
+    interface Subscriber {
+        +notify() : void
+    }
+
+    class EventType {
+        name : String
+    }
+
+    abstract class EventDispatcher {
+        eventTypes : EventType[]
+        subscribers : <EventType, Subscriber[]>
+        +subscribe(event : EventType, subscriber : Subscriber ) : void
+    }
+    EventDispatcher ..> EventType 
+    EventDispatcher ..> Subscriber
+    EventDispatcher <|-- MouseEventDispatcher
+    EventDispatcher <|-- KeyboardEventDispatcher
+
+    class CollisionsDispatcher {
+        subscribers : Element[]
+        +subscribe(subscriber : Element) : void
+    }
+}
+
+package "Game Container" {
+    class Element {
+        +notify(collisions : Element[])
+    }
+}
+
+CollisionsDispatcher ..> Element
+@enduml
