@@ -1,0 +1,40 @@
+@startuml
+package "Piece" {
+    class Coord {
+         x : Integer
+         y : Integer
+    }
+
+    class Size {
+        height : Double
+        width : Double
+    }
+
+    interface File {
+        getPath() : String
+    }
+
+    class Sprite {
+         position : Coord
+         size : Size
+    }
+    Sprite ..> Coord
+    Sprite ..> Size
+    Sprite ..|> File
+
+    class Sound
+    Sound ..|> File
+
+    class Element {
+        +notify(collisions : Element[])
+    }
+    Element --o Sprite
+
+    class CollisionShape {
+        shape : Coord[]
+    }
+    CollisionShape o-- Element
+    CollisionShape ..> Coord
+
+}
+@enduml
