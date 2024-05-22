@@ -1,0 +1,19 @@
+@startuml
+package "Collision Subscriptions" {
+  interface Subscriber {
+    +notify(bodies : Body[]) : void
+  }
+
+  class Handler {
+    subscribers : Subscriber[]
+    +subscribe(subscriber : Subscriber) : void
+  }
+  Handler ..> Subscriber
+
+}
+
+package "Piece" {
+  class Body
+}
+Subscriber ..> Body
+@enduml
