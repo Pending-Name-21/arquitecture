@@ -1,0 +1,5 @@
+@startuml
+  class Game {
+    isExitCondition() : boolean
+  }
+@enduml

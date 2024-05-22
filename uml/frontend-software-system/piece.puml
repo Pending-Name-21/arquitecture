@@ -1,0 +1,48 @@
+@startuml
+package "Piece" {
+    class Coord {
+         x : Integer
+         y : Integer
+    }
+
+    class Size {
+        height : Double
+        width : Double
+    }
+
+    interface IFile {
+        getPath() : String
+    }
+
+    class Sprite {
+         position : Coord
+         size : Size
+    }
+    Sprite --> Coord
+    Sprite --> Size
+    Sprite ..|> IFile
+
+    class Body {
+    }
+    Body --o Sprite
+
+    class CollisionShape {
+        shape : Coord[]
+    }
+    CollisionShape o-- Body
+    CollisionShape --> Coord
+
+    abstract class Sound {
+      {abstract} canPlay() : boolean
+    }
+    Sound --|> IFile
+}
+
+package "Collision Subscribers" {
+  interface Subscriber {
+    +notify(bodies : Body[]) : void
+  }
+}
+
+Body ..|> Subscriber 
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+package "Input Subscriptions" {
+  interface Subscriber {
+    +notify() : void
+  }
+
+  class EventType {
+    name : String
+  }
+
+  abstract class Handler {
+    subscribers : <EventType, Subscriber[]>
+    +subscribe(event : EventType, subscriber : Subscriber ) : void
+  }
+  Handler ..> EventType 
+    Handler ..> Subscriber
+    Handler <|-- MouseSubscriber
+    Handler <|-- KeyboardSubscriber
+}
+@enduml
