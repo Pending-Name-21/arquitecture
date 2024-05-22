@@ -1,7 +1,7 @@
 @startuml
 package "Input Subscriptions" {
-  interface Subscriber {
-    +notify() : void
+  interface ISubscriber {
+    +notify(event : EventType) : void
   }
 
   class EventType {
