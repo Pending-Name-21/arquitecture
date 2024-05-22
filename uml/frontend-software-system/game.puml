@@ -1,5 +1,7 @@
 @startuml
-  class Game {
-    isExitCondition() : boolean
+package "Game" {
+  abstract class Game {
+    {abstract} isExitCondition() : boolean
   }
+}
 @enduml
