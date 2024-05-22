@@ -1,0 +1,24 @@
+@startuml
+package "Publisher" {
+    class SubscriberFinder{
+        + List<keyboard> keyboardSubscribers
+        + List<Mosue> MouseSubscrivers
+        + subscriberPopulator( event : EventType)
+    }
+
+    class Notifier{
+        +SubscriberFinder subscriber
+        +notifyMouse(origin : EventType)
+        +notifyKeyboard (origin: EventType)
+    }
+
+    class Publisher{
+        +Notifier notifier
+        +eventMouse()
+        +eventKeyboard()
+        +successOperation()
+    }
+
+    Notifier --> SubscriberFinder
+    Publisher --> Notifier
+}

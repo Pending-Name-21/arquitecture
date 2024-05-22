@@ -1,0 +1,19 @@
+@startuml
+package "Sprite Handler" {
+        class SpriteScanner{
+            + scan()
+        }
+
+        class Sprite {
+            + genreSprite(GraphHandler graph)
+        }
+
+        class GraphHandler{
+            +Image image
+        }
+
+        SpriteScanner --> Sprite
+        Sprite --> GraphHandler
+
+    }
+@enduml

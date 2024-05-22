@@ -1,0 +1,12 @@
+@startuml
+package "Backend" {
+!include Gameloop.puml
+!include Input_handler.puml
+!include Output_Handler.puml
+!include Publisher.puml
+!include Sprite_handler.puml
+!include utils.puml
+}
+@enduml
+
+

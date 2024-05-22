@@ -1,0 +1,7 @@
+@startuml
+Package "Utils"{
+    class Utils {
+        + {static} isValidPath(String path)
+    }
+}
+@enduml

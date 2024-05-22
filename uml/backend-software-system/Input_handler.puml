@@ -1,0 +1,8 @@
+package "Input Handler" {
+    class Mouse {
+        + registerMouseEvents()
+    }
+    class Keyboard {
+        + registerKeyboardEvents()
+    }
+}

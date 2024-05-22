@@ -1,0 +1,10 @@
+@startuml
+Package "Game Loop"{
+    class GameRunner{
+        +run()
+        +processInput()
+        +render()
+        +checkExitGame()
+    }
+}
+@enduml

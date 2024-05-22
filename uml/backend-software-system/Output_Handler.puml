@@ -1,0 +1,12 @@
+@startuml
+package "Output Handler" {
+        class SoundScanner{
+            + scan()
+        }
+        class Sound {
+            +playSound(Liss<String>paths)
+        }
+
+        SoundScanner --> Sound
+    }
+@enduml
