@@ -1,0 +1,49 @@
+@startuml
+package "TicTacToe" {
+  enum Player {
+      PLAYER_X
+      PLAYER_O
+  }
+
+  class BoardPosition {
+      - x: int
+      - y: int
+      left() : void
+      right() : void
+      down() : void
+      up() : void
+      getPosition() : int[]
+  }
+  BoardPosition ..|> ISubscriber
+  BoardPosition ..> KeyboardSubscriber
+
+  class Board {
+      - board : char[][]
+      + placeSymbol( boardPosition : BoardPosition, player : Player) : void
+  }
+  Board --|> Sprite
+  Board -- Player
+
+  class BoardValidator {
+      - isGameWon : boolean
+      + checkWin(Board board) : boolean
+  }
+  BoardValidator -- Board
+  BoardValidator --|> AGame
+
+  class GameController {
+      - currentPlayer : Player
+      - board : Board
+      - boardValidator : BoardValidator
+      - boardPosition : BoardPosition
+      + checkCellEmpty() : boolean
+      + switchPlayer() : void
+  }
+  GameController ..|> ISubscriber
+  GameController -- Player
+  GameController -- BoardValidator
+  GameController -- BoardPosition
+  GameController ..> KeyboardSubscriber
+
+}
+@enduml
