@@ -23,27 +23,10 @@ package "Piece" {
     Sprite --> Size
     Sprite ..|> IFile
 
-    class Body {
-    }
-    Body --o Sprite
-
-    class CollisionShape {
-        shape : Coord[]
-    }
-    CollisionShape o-- Body
-    CollisionShape --> Coord
-
-    abstract class ASound {
+    abstract class Sound {
       {abstract} canPlay() : boolean
     }
-    ASound ..|> IFile
+    Sound ..|> IFile
 }
 
-package "Collision Subscribers" {
-  interface Subscriber {
-    +notify(bodies : Body[]) : void
-  }
-}
-
-Body ..|> Subscriber 
 @enduml

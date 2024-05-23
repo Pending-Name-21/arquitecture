@@ -4,7 +4,6 @@ workspace "Game System" "This system is meant to provide an environment to write
         frontend = softwareSystem "Frontend" "It's the game representation" {
             library = container "Library" "Holds the contract to interact with the backend" {
                 piece = component "Piece" "A game is a composition of pieces"
-                collisions_subs = component "Collisions Subscribers" "Allows pieces to collide with each other"
                 input_subs = component "Input Subscribers" "Enables a piece to interact with mouse and keyboard"
                 game = component "Game" "Holds game conditions"
             }
@@ -35,15 +34,6 @@ workspace "Game System" "This system is meant to provide an environment to write
                 oh_scanner -> sound "Request the play of true output sounds"
             }
 
-            collisions_monitor = container "Collisions Monitor" "Handles collisions" {
-                detector = component "Detector" "Detects when two or more sprites have collided" 
-                cm_scanner = component "Scanner" "Scans sprites coordinates"
-
-                detector -> publisher "Requests publication of detected collisions" 
-                cm_scanner -> piece "Iterates through sprites and collects sprite's coordindates data"
-                cm_scanner -> detector "Feeds data"
-            }
-
             input_handler = container "Input Handler" "Handles input events" {
                 mouse = component "Mouse" "Registers mouse events"
                 keyboard = component "Keyboard" "Registers keyboard events"
@@ -55,7 +45,6 @@ workspace "Game System" "This system is meant to provide an environment to write
             game_handler = container "Game Handler" "Handles the execution of the game" {
                 game_loop = component "Game Loop" "Runs the game stages" {
                     this -> input_handler "starts a check for input sequence"
-                    this -> cm_scanner "starts a check for collisions sequence"
                     this -> sh_scanner "starts a data reading request"
                     this -> oh_scanner "starts a data reading request"
                     this -> game "checks if game can still run"
