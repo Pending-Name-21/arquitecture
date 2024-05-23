@@ -4,8 +4,9 @@ workspace "Game System" "This system is meant to provide an environment to write
         frontend = softwareSystem "Frontend" "It's the game representation" {
             library = container "Library" "Holds the contract to interact with the backend" {
                 piece = component "Piece" "A game is a composition of pieces"
-                input_subs = component "Input Subscribers" "Enables a piece to interact with mouse and keyboard"
+                input_subs = component "Input Subscribers" "Recieves process input stage notifications" 
                 game = component "Game" "Holds game conditions"
+                update_subs = component "Update Subscribers" "Recieves update stage notifications" 
             }
 
         }
@@ -45,6 +46,7 @@ workspace "Game System" "This system is meant to provide an environment to write
             game_handler = container "Game Handler" "Handles the execution of the game" {
                 game_loop = component "Game Loop" "Runs the game stages" {
                     this -> input_handler "starts a check for input sequence"
+                    this -> notifier "request update subscribers to be notified"
                     this -> sh_scanner "starts a data reading request"
                     this -> oh_scanner "starts a data reading request"
                     this -> game "checks if game can still run"

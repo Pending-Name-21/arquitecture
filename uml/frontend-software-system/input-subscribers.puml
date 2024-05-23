@@ -1,6 +1,6 @@
 @startuml
-package "Input Subscriptions" {
-  interface ISubscriber {
+package "Process Input Stage Subscriptions" {
+  interface IProcessInputSubscriber {
     +notify(event : EventType) : void
   }
 
@@ -9,12 +9,12 @@ package "Input Subscriptions" {
   }
 
   abstract class Handler {
-    subscribers : <EventType, ISubscriber[]>
-    +subscribe(event : EventType, subscriber : ISubscriber ) : void
+    subscribers : <EventType, IProcessInputSubscriber[]>
+    +subscribe(event : EventType, subscriber : IProcessInputSubscriber ) : void
   }
   Handler ..> EventType 
-    Handler ..> ISubscriber
-    Handler <|-- MouseSubscriber
-    Handler <|-- KeyboardSubscriber
+  Handler ..> IProcessInputSubscriber
+  Handler <|-- MouseSubscriber
+  Handler <|-- KeyboardSubscriber
 }
 @enduml

@@ -1,0 +1,13 @@
+@startuml
+package "Update Stage Subscriptions" {
+  interface IUpdateSubscriber {
+    +notify() : void
+  }
+
+  class UpdateHandler {
+    subscribers : IUpdateSubscriber[]
+    +subscribe(subscriber : IUpdateSubscriber ) : void
+  }
+  UpdateHandler ..> IUpdateSubscriber
+}
+@enduml
