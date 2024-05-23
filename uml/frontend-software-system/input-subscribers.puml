@@ -9,11 +9,11 @@ package "Input Subscriptions" {
   }
 
   abstract class Handler {
-    subscribers : <EventType, Subscriber[]>
-    +subscribe(event : EventType, subscriber : Subscriber ) : void
+    subscribers : <EventType, ISubscriber[]>
+    +subscribe(event : EventType, subscriber : ISubscriber ) : void
   }
   Handler ..> EventType 
-    Handler ..> Subscriber
+    Handler ..> ISubscriber
     Handler <|-- MouseSubscriber
     Handler <|-- KeyboardSubscriber
 }
