@@ -17,6 +17,7 @@ package "Piece" {
     class Sprite {
          position : Coord
          size : Size
+         isHidden : boolean 
     }
     Sprite --> Coord
     Sprite --> Size
@@ -32,10 +33,10 @@ package "Piece" {
     CollisionShape o-- Body
     CollisionShape --> Coord
 
-    abstract class Sound {
+    abstract class ASound {
       {abstract} canPlay() : boolean
     }
-    Sound ..|> IFile
+    ASound ..|> IFile
 }
 
 package "Collision Subscribers" {
