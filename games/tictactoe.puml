@@ -1,4 +1,7 @@
 @startuml
+!include ../uml/frontend-software-system/input-subscribers.puml
+!include ../uml/frontend-software-system/piece.puml
+!include ../uml/frontend-software-system/game.puml
 package "TicTacToe" {
   enum Player {
       PLAYER_X
@@ -47,3 +50,4 @@ package "TicTacToe" {
 
 }
 @enduml
+
