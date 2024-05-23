@@ -17,7 +17,7 @@ package "TicTacToe" {
       up() : void
       getPosition() : int[]
   }
-  BoardPosition ..|> ISubscriber
+  BoardPosition ..|> IProcessInputSubscriber
   BoardPosition ..> KeyboardSubscriber
 
   class Board {
@@ -42,7 +42,7 @@ package "TicTacToe" {
       + checkCellEmpty() : boolean
       + switchPlayer() : void
   }
-  GameController ..|> ISubscriber
+  GameController ..|> IProcessInputSubscriber
   GameController -- Player
   GameController -- BoardValidator
   GameController -- BoardPosition

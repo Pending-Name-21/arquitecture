@@ -1,6 +1,6 @@
 @startuml 
-!include collisions-subscribers.puml
 !include input-subscribers.puml
+!include update-stage-subscribers.puml
 !include piece.puml
 !include game.puml
 @enduml
