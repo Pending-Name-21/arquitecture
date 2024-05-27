@@ -1,22 +1,18 @@
 workspace "Game System" "This system is meant to provide an environment to write games, and run them"{
 
     model {
-        frontend = softwareSystem "Frontend" "It's the game representation" {
-            library = container "Library" "Holds the contract to interact with the backend" {
+
+        coffeTime = softwareSystem "Coffe Time" "Game Development" {
+            bridge = container "Library" "Holds the contract to interact with the backend" {
                 piece = component "Piece" "A game is a composition of pieces"
-                input_subs = component "Input Subscribers" "Recieves process input stage notifications" 
+                input_subs = component "Input Subscribers" "Recieves process input stage notifications"
                 game = component "Game" "Holds game conditions"
-                update_subs = component "Update Subscribers" "Recieves update stage notifications" 
+                update_subs = component "Update Subscribers" "Recieves update stage notifications"
             }
 
-        }
-
-        backend = softwareSystem "Backend" "Responsible for handling the game" {
-            this -> frontend "Performs the game instructions"
-
-            publisher = container "Publisher" "Notifies the frontend" {
-                notifier = component "Notifier" "Sends notifications to the frontend"
-                notifier -> frontend "Notifies subscribers"
+            publisher = container "Publisher" "Notifies the library" {
+                notifier = component "Notifier" "Sends notifications to the library"
+                notifier -> library "Notifies subscribers"
             }
 
             sprites_handler = container "Sprites handler" "Manages Sprites" {
@@ -55,7 +51,7 @@ workspace "Game System" "This system is meant to provide an environment to write
         }
 
         player = person "Player" "Plays games" {
-            this -> backend "Loads games into the console"
+            this -> coffeTime "Loads games into the console"
         }
 
         gameDev = person "Game developer" "A developer that want's to create new games" {
