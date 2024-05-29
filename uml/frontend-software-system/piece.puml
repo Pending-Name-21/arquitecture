@@ -17,7 +17,7 @@ package "Piece" {
     class Sprite {
          position : Coord
          size : Size
-         isHidden : boolean 
+         isHidden : boolean
     }
     Sprite --> Coord
     Sprite --> Size

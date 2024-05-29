@@ -1,0 +1,22 @@
+@startuml
+!include process-input-handler.puml
+!include game-settings.puml
+!include update-handler.puml
+
+package "Game Loop" {
+  class Game {
+    -gameSettings : AGameSettings
+    -inputVerifier : InputVerifier
+    -updatePublisher : UpdatePublisher
+
+    -processInput() : void
+    -update() : void
+    -render() : void
+    +run() : void
+  }
+
+  Game --> AGameSettings
+  Game --> InputVerifier
+  Game --> UpdatePublisher
+}
+@enduml
