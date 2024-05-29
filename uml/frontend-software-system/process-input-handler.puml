@@ -1,0 +1,36 @@
+@startuml
+package "Process Input Handler" {
+  interface IProcessInputSubscriber {
+    +notify(event : EventType) : void
+  }
+
+  class EventType {
+    name : String
+  }
+
+  class ProcessInputPublisher {
+    -subscribers : <EventType, IProcessInputSubscriber[]>
+
+    +subscribe(event : EventType, subscriber : IProcessInputSubscriber) : void
+    ~getEvents() : List<EventType>
+  }
+  ProcessInputPublisher "1" o-- "*" EventType
+  ProcessInputPublisher "1" o-- "*" IProcessInputSubscriber : notifies subscriptor
+
+  class InputVerifier {
+    -processInputPublisher : ProcessInputPublisher
+    -inputListeners : List<InputListener>
+
+    +check() : void
+  }
+  InputVerifier o-- ProcessInputPublisher : fetches required events
+  InputVerifier o-- InputListener : fetches events
+
+  interface InputListener {
+    ~listen() : List<String>
+  }
+
+  KeyboardListener ..|> InputListener
+  MouseListener ..|> InputListener
+}
+@enduml

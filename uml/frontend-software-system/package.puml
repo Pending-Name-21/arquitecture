@@ -1,6 +1,6 @@
-@startuml 
-!include input-subscribers.puml
 !include update-stage-subscribers.puml
+@startuml
+!include process-input-handler.puml
 !include piece.puml
 !include game.puml
 @enduml
