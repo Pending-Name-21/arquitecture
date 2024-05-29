@@ -5,9 +5,9 @@ package "Update Handler" {
   }
 
   class UpdatePublisher {
-    subscribers : IUpdateSubscriber[]
+    -subscribers : IUpdateSubscriber[]
     +subscribe(subscriber : IUpdateSubscriber ) : void
   }
-  UpdatePublisher ..> IUpdateSubscriber
+  UpdatePublisher o-- IUpdateSubscriber
 }
 @enduml
