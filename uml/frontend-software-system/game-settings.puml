@@ -1,6 +1,6 @@
 @startuml
-package "Game" {
-  abstract class AGame {
+package "Game Settings" {
+  abstract class AGameSettings {
     {abstract} isGameWon() : boolean
   }
 }
