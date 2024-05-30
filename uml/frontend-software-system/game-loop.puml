@@ -9,7 +9,7 @@ package "Game Loop" {
     -gameSettings : AGameSettings
     -inputVerifier : InputVerifier
     -updatePublisher : UpdatePublisher
-    -renderManager : RenderManager
+    -renderPublisher : RenderPublisher
 
     -processInput() : void
     -update() : void
@@ -20,6 +20,6 @@ package "Game Loop" {
   Game --> AGameSettings
   Game --> InputVerifier
   Game --> UpdatePublisher
-  Game --> RenderManager
+  Game --> RenderPublisher
 }
 @enduml

@@ -1,28 +1,87 @@
 @startuml
-!include piece.puml
-
 package "Render Handler" {
-  interface IRenderSubscriber {
-    +notify() : void
-  }
+    class RenderManager {
+        -spriteRenderer : SpriteRenderer
+        -soundPlayer : SoundPlayer
 
-  class RenderPublisher {
-    -subscribers : IRenderSubscriber[]
-    +subscribe(subscriber : IRenderSubscriber) : void
-    +notifySubscribers() : void
-  }
-  RenderPublisher o-- IRenderSubscriber : notifies subscriptor
+        +renderSprites() : void
+        +playSounds() : void
+    }
 
-  class RenderManager {
-    -renderPublisher : RenderPublisher
-    -sprites : Sprite[]
-    -sounds : Sound[]
+    class SpriteRenderer {
+        -sprites : Sprite[]
+        -spriteFactory : SpriteFactory
 
-    +render() : void
-  }
-  RenderManager o-- RenderPublisher : notifies for render events
-  RenderManager o-- Sprite : renders sprites
-  RenderManager o-- Sound : plays sounds
+        +addSprite(sprite : Sprite) : void
+        +removeSprite(sprite : Sprite) : void
+        +updateSprite(sprite : Sprite, newSprite : Sprite) : void
+        +renderSprite(sprite: Sprite) : void
+    }
+
+    class SoundPlayer {
+        -sounds : Sound[]
+        -soundFactory : SoundFactory
+
+        +addSound(sound : Sound) : void
+        +associateSoundWithSprite(sprite : Sprite, sound : Sound) : void
+        +removeSound(sound : Sound) : void
+        +removeSoundFromSprite(sprite : Sprite) : void
+        +playSound(sprite : Sprite) : void
+        +playSound(sound : Sound) : void
+    }
+
+    interface ISpriteFactory {
+        +createSprite() : Sprite
+    }
+
+    class SpriteFactory implements ISpriteFactory {
+        +createSprite() : Sprite
+    }
+
+    interface ISoundFactory {
+        +createSound() : Sound
+    }
+
+    class SoundFactory implements ISoundFactory {
+        +createSound() : Sound
+    }
+
+    class Coord {
+        x : Integer
+        y : Integer
+    }
+
+    class Size {
+        height : Double
+        width : Double
+    }
+
+    interface IFile {
+        getPath() : String
+    }
+
+    class Sprite {
+        position : Coord
+        size : Size
+        isHidden : boolean
+        -sound : Sound
+        +getSound() : Sound
+    }
+    Sprite --> Coord
+    Sprite --> Size
+    Sprite o-- Sound : can has
+    Sprite ..|> IFile
+
+    abstract class Sound {
+        {abstract} canPlay() : boolean
+    }
+    Sound ..|> IFile
+
+    RenderManager o-- SpriteRenderer : uses
+    RenderManager o-- SoundPlayer : uses
+    RenderManager o-- SpriteFactory : creates sprites
+    RenderManager o-- SoundFactory : creates sounds
+    SpriteRenderer *-- Sprite : manipulates
+    SoundPlayer *-- Sound : manipulates
 }
-
 @enduml
