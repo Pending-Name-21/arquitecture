@@ -25,7 +25,6 @@ package "Render Handler" {
         -soundFactory : SoundFactory
 
         +addSound(sound : Sound) : void
-        +associateSoundWithSprite(sprite : Sprite, sound : Sound) : void
         +removeSound(sound : Sound) : void
         +removeSoundFromSprite(sprite : Sprite) : void
         +playSound(sprite : Sprite) : void
