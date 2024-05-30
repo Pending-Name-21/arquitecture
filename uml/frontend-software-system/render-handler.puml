@@ -1,0 +1,28 @@
+@startuml
+!include piece.puml
+
+package "Render Handler" {
+  interface IRenderSubscriber {
+    +notify() : void
+  }
+
+  class RenderPublisher {
+    -subscribers : IRenderSubscriber[]
+    +subscribe(subscriber : IRenderSubscriber) : void
+    +notifySubscribers() : void
+  }
+  RenderPublisher o-- IRenderSubscriber : notifies subscriptor
+
+  class RenderManager {
+    -renderPublisher : RenderPublisher
+    -sprites : Sprite[]
+    -sounds : Sound[]
+
+    +render() : void
+  }
+  RenderManager o-- RenderPublisher : notifies for render events
+  RenderManager o-- Sprite : renders sprites
+  RenderManager o-- Sound : plays sounds
+}
+
+@enduml
