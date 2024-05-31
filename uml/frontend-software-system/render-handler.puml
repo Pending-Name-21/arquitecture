@@ -1,0 +1,57 @@
+@startuml
+!include piece.puml
+
+package "Render Handler" {
+    class RenderManager {
+        -spriteRenderer : SpriteRenderer
+        -soundPlayer : SoundPlayer
+
+        +renderSprites() : void
+        +playSounds() : void
+    }
+
+    class SpriteRenderer {
+        -sprites : Sprite[]
+        -spriteFactory : SpriteFactory
+
+        +addSprite(sprite : Sprite) : void
+        +removeSprite(sprite : Sprite) : void
+        +updateSprite(sprite : Sprite, newSprite : Sprite) : void
+        +renderSprite(sprite: Sprite) : void
+    }
+
+    class SoundPlayer {
+        -sounds : Sound[]
+        -soundFactory : SoundFactory
+
+        +addSound(sound : Sound) : void
+        +removeSound(sound : Sound) : void
+        +removeSoundFromSprite(sprite : Sprite) : void
+        +playSound(sprite : Sprite) : void
+        +playSound(sound : Sound) : void
+    }
+
+    interface ISpriteFactory {
+        +createSprite() : Sprite
+    }
+
+    class SpriteFactory implements ISpriteFactory {
+        +createSprite() : Sprite
+    }
+
+    interface ISoundFactory {
+        +createSound() : Sound
+    }
+
+    class SoundFactory implements ISoundFactory {
+        +createSound() : Sound
+    }
+
+    RenderManager o-- SpriteRenderer : uses
+    RenderManager o-- SoundPlayer : uses
+    RenderManager o-- SpriteFactory : creates sprites
+    RenderManager o-- SoundFactory : creates sounds
+    SpriteRenderer *-- Sprite : manipulates
+    SoundPlayer *-- Sound : manipulates
+}
+@enduml
