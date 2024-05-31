@@ -1,0 +1,53 @@
+@startuml input-listener-console
+package "Console" {
+
+    interface IEventListener {
+        +handler: IEventHandler
+        +native_listen(): List<String>
+    }
+
+    class KeyboardListener {
+        +handler: IEventHandler
+        +native_listen(): List<String>
+    }
+
+    class MouseListener {
+        +handler: IEventHandler
+        +native_listen(): List<String>
+    }
+
+    IEventListener <|.. KeyboardListener : implements
+    IEventListener <|.. MouseListener : implements
+
+    interface IEventHandler {
+        -poolEvents: Vec<String>
+        +handleEvent(): void
+        +getPoolEvent(): Vec<String>
+    }
+
+    class KeyboardEventHandler {
+        -poolEvents: Vec<String>
+        +handleEvent(): void
+        +getPoolEvent(): Vec<String>
+    }
+
+    class MouseEventHandler {
+        -poolEvents: Vec<String>
+        +handleEvent(): void
+        +getPoolEvent(): Vec<String>
+    }
+
+    IEventHandler <|.. KeyboardEventHandler : implements
+    IEventHandler <|.. MouseEventHandler : implements
+
+    IEventHandler *-- IEventListener : "composed of"
+
+    class AppHandler {
+        -eventHandlers: Vec<IEventHandler>
+        +init(): void
+    }
+
+    AppHandler o-- IEventHandler : "composed of"
+
+}
+@enduml
