@@ -1,7 +1,7 @@
 @startuml input-listener-console
 package "Console" {
 
-    interface IEventListener {
+    abstract class IEventListener {
         +handler: IEventHandler
         +native_listen(): List<String>
     }
@@ -16,10 +16,10 @@ package "Console" {
         +native_listen(): List<String>
     }
 
-    IEventListener <|.. KeyboardListener : implements
-    IEventListener <|.. MouseListener : implements
+    IEventListener <|-- KeyboardListener
+    IEventListener <|-- MouseListener
 
-    interface IEventHandler {
+    abstract class IEventHandler {
         -poolEvents: Vec<String>
         +handleEvent(): void
         +getPoolEvent(): Vec<String>
@@ -37,8 +37,8 @@ package "Console" {
         +getPoolEvent(): Vec<String>
     }
 
-    IEventHandler <|.. KeyboardEventHandler : implements
-    IEventHandler <|.. MouseEventHandler : implements
+    IEventHandler <|-- KeyboardEventHandler
+    IEventHandler <|-- MouseEventHandler
 
     IEventHandler *-- IEventListener : "composed of"
 
