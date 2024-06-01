@@ -40,14 +40,14 @@ package "Console" {
     AEventHandler <|-- KeyboardEventHandler
     AEventHandler <|-- MouseEventHandler
 
-    AEventListener *-- AEventHandler : "composed of"
+    AEventListener *-- AEventHandler 
 
     class AppHandler {
         -eventHandlers: Vec<AEventHandler>
         +init(): void
     }
 
-    AppHandler o-- AEventHandler : "composed of"
+    AppHandler o-- AEventHandler  
 
 }
 @enduml
