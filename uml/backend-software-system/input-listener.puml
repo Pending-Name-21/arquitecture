@@ -1,25 +1,25 @@
 @startuml input-listener-console
 package "Console" {
 
-    abstract class IEventListener {
-        +handler: IEventHandler
+    abstract class AEventListener {
+        +handler: AEventHandler
         +native_listen(): List<String>
     }
 
     class KeyboardListener {
-        +handler: IEventHandler
+        +handler: AEventHandler
         +native_listen(): List<String>
     }
 
     class MouseListener {
-        +handler: IEventHandler
+        +handler: AEventHandler
         +native_listen(): List<String>
     }
 
-    KeyboardListener <|.. IEventListener
-    MouseListener <|.. IEventListener
+    AEventListener <|-- KeyboardListener
+    AEventListener <|-- MouseListener
 
-    abstract class IEventHandler {
+    abstract class AEventHandler {
         -poolEvents: Vec<String>
         +handleEvent(): void
         +getPoolEvent(): Vec<String>
@@ -37,17 +37,17 @@ package "Console" {
         +getPoolEvent(): Vec<String>
     }
 
-    KeyboardEventHandler <|.. IEventHandler
-    MouseEventHandler <|.. IEventHandler
+    AEventHandler <|-- KeyboardEventHandler
+    AEventHandler <|-- MouseEventHandler
 
-    IEventListener *-- IEventHandler : "composed of"
+    AEventListener *-- AEventHandler : "composed of"
 
     class AppHandler {
-        -eventHandlers: Vec<IEventHandler>
+        -eventHandlers: Vec<AEventHandler>
         +init(): void
     }
 
-    AppHandler o-- IEventHandler : "composed of"
+    AppHandler o-- AEventHandler : "composed of"
 
 }
 @enduml
