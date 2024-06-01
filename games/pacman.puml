@@ -1,0 +1,161 @@
+@startuml
+abstract class Game {
+    + isExitCondition() : boolean
+}
+
+class Coord {
+    - x : int
+    - y : int
+}
+
+class Size {
+    - height : double
+    - width : double
+}
+
+interface IFile {
+    + getPath() : String
+}
+
+class Sprite {
+    - position : Coord
+    - size : Size
+}
+abstract class Sound {
+    {abstract} + canPlay() : boolean
+}
+
+IFile --|> Sound
+Sprite --> Coord
+Sprite --> Size
+Sprite ..|> IFile
+
+
+
+
+
+
+interface Subscriber {
+    + notify() : void
+}
+
+class EventType {
+    - name : String
+}
+
+abstract class Handler {
+    - subscribers : Map<EventType, List<Subscriber>>
+    + subscribe(event : EventType, subscriber : Subscriber) : void
+}
+
+Handler ..> EventType
+Handler ..> Subscriber
+Handler <|-- MouseSubscriber
+Handler <|-- KeyboardSubscriber
+
+
+class Position
+{
+ - x : int
+ - y : int
+}
+class Wall{
+ - position: Position
+}
+class PowerSphere
+{
+ - time : int
+ - position: Position
+ + collect() : int
+ + activatePower() : void
+
+}
+
+class Sphere
+{
+ - position: Position
+ + collect() : int
+}
+
+class Ghost
+{
+ -state : string
+ -color : string
+ + fleePacman () : void
+ + chasePacman () : void
+}
+
+interface ClydeGhost{}
+interface PinkyGhost{}
+interface InkyGhost{}
+interface BlinkyGhost{}
+
+interface ICharacter
+{
+ - position: Position
+ + respawn (Position position) : void
+ + move (Position) : bool
+}
+class Pacman 
+{
+ - lives : int
+ - direction : string
+ + changeDirection(string direction) : void
+ + looseLife() : bool
+}
+
+class Maze
+{
+ - walls : List<Wall>
+ - spheres: List<Sphere>
+ - powerSphere : List<PowerSpheres>
+ - numberSpheres : int 
+ - numberPowerSpheres : int 
+ + generateMaze() : void
+}
+
+class GameController
+{
+ -maze : Maze
+ - pacman : Pacman
+ -ghosts : List<Ghost>
+ -score : int
+ + start() : void
+ + restart () :void
+ + pause () : void
+ + end () : void
+}
+
+PowerSphere --> Position
+Sphere --> Position
+Wall --> Position
+ICharacter --> Position
+
+Maze --> Wall
+Maze --> Sphere
+Maze --> PowerSphere
+
+Pacman ..|> ICharacter
+Ghost ..|> ICharacter
+
+ClydeGhost ..> Ghost
+InkyGhost ..> Ghost
+PinkyGhost ..> Ghost
+BlinkyGhost ..> Ghost
+
+
+GameController --> Maze
+GameController --> Pacman
+GameController --> Ghost
+
+GameController --> Game
+Pacman --> Sprite
+Ghost --> Sprite
+Maze --> Sprite
+Sphere --> Sprite
+PowerSphere --> Sprite
+
+
+GameController --> KeyboardSubscriber
+GameController ..> Subscriber
+@enduml
