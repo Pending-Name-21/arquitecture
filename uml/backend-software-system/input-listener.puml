@@ -16,8 +16,8 @@ package "Console" {
         +native_listen(): List<String>
     }
 
-    IEventListener <|-- KeyboardListener
-    IEventListener <|-- MouseListener
+    KeyboardListener <|.. IEventListener
+    MouseListener <|.. IEventListener
 
     abstract class IEventHandler {
         -poolEvents: Vec<String>
@@ -37,10 +37,10 @@ package "Console" {
         +getPoolEvent(): Vec<String>
     }
 
-    IEventHandler <|-- KeyboardEventHandler
-    IEventHandler <|-- MouseEventHandler
+    KeyboardEventHandler <|.. IEventHandler
+    MouseEventHandler <|.. IEventHandler
 
-    IEventHandler *-- IEventListener : "composed of"
+    IEventListener *-- IEventHandler : "composed of"
 
     class AppHandler {
         -eventHandlers: Vec<IEventHandler>
