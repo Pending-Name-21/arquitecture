@@ -126,36 +126,47 @@ class GameController
  + end () : void
 }
 
-PowerSphere --> Position
-Sphere --> Position
-Wall --> Position
-ICharacter --> Position
+interface ISphere
+{
+ - postion : Position
+ + collect() : void
+}
+
+GameController ..> KeyboardSubscriber   : uses
+GameController ..|> Subscriber : implements
+GameController --> Pacman
+GameController --> Ghost
+GameController --> Maze
+
+
+Ghost ..|> ClydeGhost
+Ghost ..|> PinkyGhost
+Ghost ..|> InkyGhost
+Ghost ..|> BlinkyGhost
+
+
+Pacman ..|> ICharacter
+Ghost ..|> ICharacter
 
 Maze --> Wall
 Maze --> Sphere
 Maze --> PowerSphere
 
-Pacman ..|> ICharacter
-Ghost ..|> ICharacter
-
-ClydeGhost ..> Ghost
-InkyGhost ..> Ghost
-PinkyGhost ..> Ghost
-BlinkyGhost ..> Ghost
+GameController --|> Game : extends
 
 
-GameController --> Maze
-GameController --> Pacman
-GameController --> Ghost
+Ghost --|> Sprite : extends
+Pacman --|> Sprite : extends
+PowerSphere --|> Sprite : extends
+Sphere --|> Sprite : extends
+Wall --|> Sprite : extends
 
-GameController --> Game
-Pacman --> Sprite
-Ghost --> Sprite
-Maze --> Sprite
-Sphere --> Sprite
-PowerSphere --> Sprite
+PowerSphere ..|> ISphere
+Sphere ..|> ISphere
+
+ISphere --> Position : have
+ICharacter --> Position : have
+Wall --> Position : have
 
 
-GameController --> KeyboardSubscriber
-GameController ..> Subscriber
 @enduml
