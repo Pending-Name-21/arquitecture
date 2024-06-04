@@ -2,15 +2,39 @@ workspace "Game System" "This system is meant to provide an environment to write
 
     model {
         coffeTime = softwareSystem "Coffe Time" "Game Development" {
-            screen = container "Screen" "Renders content" {
-                input_monitor = component "Input device monitor" "Listens for input devices events"
-                sound_manager = component "Sound Manager" "Manages sound operations such as reproduction"
-                gui = component "GUI" "Renders content to the screen"
+            server = container "Socket server" "Recieves data" {
+                socket_server = component "Socket server" "Recieves data"
             }
-            console = container "Console" "Library to interact with the screen" {
-                output_intermediate = component "Output intermediate" "Routines to send data"
-                input_intermediate = component "Input intermediate" "Routines to read input events"
+            screen = container "Screen" "Handles the output of a game such as graphics or sound" {
+                s_socket_client = component "Socket Client" "Sends data" {
+                    this -> socket_server "sends input data"
+                }
+                s_socket_server = component "Socket Server" "Recieves data"
+
+                input_monitor = component "Input device monitor" "Listens for input devices events" {
+                    this -> s_socket_client "Registers input device events"
+                }
+                sound_manager = component "Sound Manager" "Manages sound operations such as reproduction" {
+                    this -> s_socket_server "Waits for data"
+                    s_socket_server -> this "Delivers data"
+                }
+                gui = component "GUI" "Renders content to the screen" {
+                    this -> s_socket_server "Waits for data"
+                    s_socket_server -> this "Delivers data"
+                }
             }
+            console = container "Console" "Library to perform low-level operations" {
+                c_socket_client = component "Socket Client" "Sends data" {
+                    this -> s_socket_server "sends output data"
+                }
+                output_intermediate = component "Output intermediate" "Routines to send data" {
+                    this -> c_socket_client "writes output data"
+                }
+                input_intermediate = component "Input intermediate" "Routines to read input events" {
+                    this -> socket_server "reads for input events"
+                }
+            }
+
 
             bridge = container "Bridge" "Represents the contract to interact with the console" {
                 this -> console "calls routines to handle low-level operations"
