@@ -8,20 +8,18 @@ workspace "Game System" "This system is meant to provide an environment to write
                 gui = component "GUI" "Renders content to the screen"
             }
             console = container "Console" "Library to interact with the screen" {
-                input_listener = component "Input listener" "Intermediate to input devices management"
-                output_handler = component "Output Handler" "Handles output requests such as sound reproduction"
-                render = component "Render" "Intermediate to graphics renderization"
+                output_intermediate = component "Output intermediate" "Routines to send data"
+                input_intermediate = component "Input intermediate" "Routines to read input events"
             }
 
             bridge = container "Bridge" "Represents the contract to interact with the console" {
                 this -> console "calls routines to handle low-level operations"
 
                 render_handler = component "Render handler" "Responsible for the graphical components of the game" {
-                    this -> render "Sends data to render"
-                    this -> output_handler "Sends output requests"
+                    this -> output_intermediate "Sends output data"
                 }
                 process_input_handler = component "Process input handler" "Responsible for processing input events" {
-                    this -> input_listener "sends a request for input events"
+                    this -> input_intermediate "sends a request for input events"
                 }
                 game_settings = component "Game Settings" "It's where the game settings reside"
                 update_handler = component "Update Handler" "Handles update stage events"
