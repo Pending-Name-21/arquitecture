@@ -1,5 +1,6 @@
 @startuml
 package "Process Input Handler" {
+!startsub INTERFACE
   interface IProcessInputSubscriber {
     +notify(event : EventType) : void
   }
@@ -16,6 +17,7 @@ package "Process Input Handler" {
   }
   ProcessInputPublisher "1" o-- "*" EventType
   ProcessInputPublisher "1" o-- "*" IProcessInputSubscriber : notifies subscriptor
+!endsub
 
   class InputVerifier {
     -processInputPublisher : ProcessInputPublisher
