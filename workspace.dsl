@@ -2,17 +2,22 @@ workspace "Game System" "This system is meant to provide an environment to write
 
     model {
         coffeTime = softwareSystem "Coffe Time" "Game Development" {
-            console = container "Console" "Responsible for Low Level operations" {
-                input_listener = component "Input listener" "Listens for keyboard and mouse events"
-                output_handler = component "Output Handler" "Handles output event requests"
-                gui_manager = component "GUI Manager" "Renders content to the screen"
+            screen = container "Screen" "Renders content" {
+                input_monitor = component "Input device monitor" "Listens for input devices events"
+                sound_manager = component "Sound Manager" "Manages sound operations such as reproduction"
+                gui = component "GUI" "Renders content to the screen"
+            }
+            console = container "Console" "Library to interact with the screen" {
+                input_listener = component "Input listener" "Intermediate to input devices management"
+                output_handler = component "Output Handler" "Handles output requests such as sound reproduction"
+                render = component "Render" "Intermediate to graphics renderization"
             }
 
             bridge = container "Bridge" "Represents the contract to interact with the console" {
                 this -> console "calls routines to handle low-level operations"
 
                 render_handler = component "Render handler" "Responsible for the graphical components of the game" {
-                    this -> gui_manager "Sends data to render"
+                    this -> render "Sends data to render"
                     this -> output_handler "Sends output requests"
                 }
                 process_input_handler = component "Process input handler" "Responsible for processing input events" {
