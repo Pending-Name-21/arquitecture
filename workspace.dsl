@@ -1,4 +1,4 @@
-workspace "Game System" "This system is meant to provide an environment to write games, and run them" {
+workspace "Game Engine" "Game development using high-level languages" {
 
     model {
         coffeTime = softwareSystem "Coffe Time" "Game Development" {
