@@ -132,6 +132,21 @@ interface ISphere
  + collect() : void
 }
 
+
+interface CollisionHandler {
+    + accept(Collision collision, CollisionHandler other) : void
+}
+
+class Collision {
+    + detectCollision(entity1 : CollisionHandler, entity2 : CollisionHandler) : void
+    + handleCollision(Pacman pacman, Ghost ghost) : void
+    + handleCollision(Pacman pacman, Wall wall) : void
+    + handleCollision(Pacman pacman, Sphere sphere) : void
+    + handleCollision(Pacman pacman, PowerSphere powerSphere) : void
+    + handleCollision(Ghost ghost, Wall wall) : void
+    + handleCollision(Ghost ghost, Pacman pacman) : void
+}
+
 GameController ..> KeyboardSubscriber   : uses
 GameController ..|> Subscriber : implements
 GameController --> Pacman
@@ -167,6 +182,16 @@ Sphere ..|> ISphere
 ISphere --> Position : have
 ICharacter --> Position : have
 Wall --> Position : have
+
+
+Pacman ..|> CollisionHandler
+Ghost ..|> CollisionHandler
+Wall ..|> CollisionHandler
+Sphere ..|> CollisionHandler
+PowerSphere ..|> CollisionHandler
+
+Collision --> CollisionHandler : manages
+
 
 
 @enduml
