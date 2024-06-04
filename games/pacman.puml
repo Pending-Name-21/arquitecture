@@ -1,84 +1,44 @@
 @startuml
-abstract class Game {
-    + isExitCondition() : boolean
+package "Process Input Handler" {
+!includesub ../uml/frontend-software-system/process-input-handler.puml!INTERFACE
 }
-
-class Coord {
-    - x : int
-    - y : int
+package "Render Handler" {
+!includesub ../uml/frontend-software-system/render-handler.puml!INTERFACE
 }
-
-class Size {
-    - height : double
-    - width : double
-}
-
-interface IFile {
-    + getPath() : String
-}
-
-class Sprite {
-    - position : Coord
-    - size : Size
-}
-abstract class Sound {
-    {abstract} + canPlay() : boolean
-}
-
-IFile --|> Sound
-Sprite --> Coord
-Sprite --> Size
-Sprite ..|> IFile
+!include ../uml/frontend-software-system/game-settings.puml
 
 
+package Pac-Man {
 
-
-
-
-interface Subscriber {
-    + notify() : void
-}
-
-class EventType {
-    - name : String
-}
-
-abstract class Handler {
-    - subscribers : Map<EventType, List<Subscriber>>
-    + subscribe(event : EventType, subscriber : Subscriber) : void
-}
-
-Handler ..> EventType
-Handler ..> Subscriber
-Handler <|-- MouseSubscriber
-Handler <|-- KeyboardSubscriber
-
-
-class Position
-{
+class Position {
  - x : int
  - y : int
 }
-class Wall{
+
+class Wall {
+ - sprite : Sprite
  - position: Position
 }
+
 class PowerSphere
 {
+ - sprite : Sprite
  - time : int
  - position: Position
  + collect() : int
  + activatePower() : void
-
 }
 
 class Sphere
 {
+ - sprite : Sprite
  - position: Position
  + collect() : int
 }
 
 class Ghost
 {
+ - sprite : Sprite
  -state : string
  -color : string
  + fleePacman () : void
@@ -98,6 +58,7 @@ interface ICharacter
 }
 class Pacman 
 {
+ - sprite : Sprite
  - lives : int
  - direction : string
  + changeDirection(string direction) : void
@@ -125,6 +86,8 @@ class GameController
  + pause () : void
  + end () : void
 }
+GameController ..> SoundFactory
+GameController ..> SpriteFactory
 
 interface ISphere
 {
@@ -147,8 +110,8 @@ class Collision {
     + handleCollision(Ghost ghost, Pacman pacman) : void
 }
 
-GameController ..> KeyboardSubscriber   : uses
-GameController ..|> Subscriber : implements
+GameController ..> ProcessInputPublisher: uses
+GameController ..|> IProcessInputSubscriber : implements
 GameController --> Pacman
 GameController --> Ghost
 GameController --> Maze
@@ -167,14 +130,7 @@ Maze --> Wall
 Maze --> Sphere
 Maze --> PowerSphere
 
-GameController --|> Game : extends
-
-
-Ghost --|> Sprite : extends
-Pacman --|> Sprite : extends
-PowerSphere --|> Sprite : extends
-Sphere --|> Sprite : extends
-Wall --|> Sprite : extends
+GameController --|> AGameSettings : extends
 
 PowerSphere ..|> ISphere
 Sphere ..|> ISphere
@@ -193,5 +149,5 @@ PowerSphere ..|> CollisionHandler
 Collision --> CollisionHandler : manages
 
 
-
+}
 @enduml
