@@ -6,6 +6,9 @@ package "Render Handler" {
 !includesub ../uml/frontend-software-system/render-handler.puml!INTERFACE
 }
 !include ../uml/frontend-software-system/game-settings.puml
+package "Update Handler" {
+!includesub ../uml/frontend-software-system/update-handler.puml!INTERFACE
+}
 
 
 package Pac-Man {
