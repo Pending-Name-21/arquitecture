@@ -36,7 +36,7 @@ class Sphere
  + collect() : int
 }
 
-class Ghost
+abstract class Ghost
 {
  - sprite : Sprite
  -state : string
@@ -45,14 +45,15 @@ class Ghost
  + chasePacman () : void
 }
 
-interface ClydeGhost{}
-interface PinkyGhost{}
-interface InkyGhost{}
-interface BlinkyGhost{}
+class ClydeGhost{}
+class PinkyGhost{}
+class InkyGhost{}
+class BlinkyGhost{}
 
 interface ICharacter
 {
  - position: Position
+ - direction : Direction
  + respawn (Position position) : void
  + move (Position) : bool
 }
@@ -60,16 +61,12 @@ class Pacman
 {
  - sprite : Sprite
  - lives : int
- - direction : string
- + changeDirection(string direction) : void
- + looseLife() : bool
+ + hit() : bool
 }
 
 class Maze
 {
- - walls : List<Wall>
- - spheres: List<Sphere>
- - powerSphere : List<PowerSpheres>
+ - blocks : Block[][]
  - numberSpheres : int 
  - numberPowerSpheres : int 
  + generateMaze() : void
@@ -81,11 +78,17 @@ class GameController
  - pacman : Pacman
  -ghosts : List<Ghost>
  -score : int
- + start() : void
- + restart () :void
- + pause () : void
- + end () : void
+ + checkCollisions() : void
+ + handleInput() : void
+ + updateScore() : void
+ + respawnCharacters() : void
+ + activatePowerUp() : void
+ + restart(): void
 }
+
+
+
+
 GameController ..> SoundFactory
 GameController ..> SpriteFactory
 
@@ -96,18 +99,39 @@ interface ISphere
 }
 
 
-interface CollisionHandler {
-    + accept(Collision collision, CollisionHandler other) : void
+abstract class CollisionHandler {
+    + handleCollision() : void
+    + update() : void
 }
 
-class Collision {
-    + detectCollision(entity1 : CollisionHandler, entity2 : CollisionHandler) : void
-    + handleCollision(Pacman pacman, Ghost ghost) : void
-    + handleCollision(Pacman pacman, Wall wall) : void
-    + handleCollision(Pacman pacman, Sphere sphere) : void
-    + handleCollision(Pacman pacman, PowerSphere powerSphere) : void
-    + handleCollision(Ghost ghost, Wall wall) : void
-    + handleCollision(Ghost ghost, Pacman pacman) : void
+CollisionHandler <|-- PacmanGhostCollisionHandler
+CollisionHandler <|-- PacmanWallCollisionHandler
+CollisionHandler <|-- PacmanSphereCollisionHandler
+CollisionHandler <|-- PacmanPowerSphereCollisionHandler
+CollisionHandler <|-- GhostWallCollisionHandler
+
+CollisionHandler ..> UpdatePublisher
+
+
+
+class Direction {
+ - dx : int
+ - dy : int
+ + Direction(dx : int, dy : int)
+ + up() : Direction
+ + down() : Direction
+ + left() : Direction
+ + right() : Direction
+}
+
+
+interface IMovable {
+ + move(direction : Direction) : bool
+}
+
+
+class Block{
+ - position : Position
 }
 
 GameController ..> ProcessInputPublisher: uses
@@ -117,18 +141,16 @@ GameController --> Ghost
 GameController --> Maze
 
 
-Ghost ..|> ClydeGhost
-Ghost ..|> PinkyGhost
-Ghost ..|> InkyGhost
-Ghost ..|> BlinkyGhost
+ClydeGhost --|> Ghost
+PinkyGhost --|> Ghost
+InkyGhost --|> Ghost
+BlinkyGhost --|> Ghost
 
 
 Pacman ..|> ICharacter
 Ghost ..|> ICharacter
 
-Maze --> Wall
-Maze --> Sphere
-Maze --> PowerSphere
+Maze --> Block
 
 GameController --|> AGameSettings : extends
 
@@ -140,14 +162,25 @@ ICharacter --> Position : have
 Wall --> Position : have
 
 
-Pacman ..|> CollisionHandler
+
+Pacman ..|> IMovable
+Ghost ..|> IMovable
+
+IMovable --- Direction
+
+ICharacter --> Direction
+
+
+Wall --|> Block
+Pacman --|> Block
+Ghost --|> Block
+PowerSphere --|> Block
+Sphere --|> Block
+
 Ghost ..|> CollisionHandler
 Wall ..|> CollisionHandler
 Sphere ..|> CollisionHandler
 PowerSphere ..|> CollisionHandler
-
-Collision --> CollisionHandler : manages
-
 
 }
 @enduml
