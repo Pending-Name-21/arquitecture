@@ -1,0 +1,28 @@
+@startuml
+package "Map" {
+  class Block{
+   - position : Position
+  }
+
+  class Maze {
+   - blocks : Block[][]
+   + generateMaze() : void
+  }
+  Maze --> Block
+
+
+  class Wall {
+    - sprite : Sprite
+      - position: Position
+  }
+  Wall --|> Block
+  Wall --> Position : have
+  Wall ..|> ACollisionHandler
+
+  class Position {
+   - x : int
+   - y : int
+  }
+
+}
+@enduml

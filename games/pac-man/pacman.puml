@@ -12,15 +12,8 @@ package "Update Handler" {
 
 package Pac-Man {
 !include collisions.puml
+!include maze.puml
 
-class Position {
- - x : int
- - y : int
-}
-
-class Wall {
- - sprite : Sprite
- - position: Position
 }
 
 class PowerSphere
@@ -67,12 +60,6 @@ class Pacman
 
 }
 
-class Maze
-{
- - blocks : Block[][]
- + generateMaze() : void
-}
-
 class GameController
 {
  -maze : Maze
@@ -114,9 +101,6 @@ interface IMovable {
 }
 
 
-class Block{
- - position : Position
-}
 
 GameController ..> ProcessInputPublisher: uses
 GameController ..|> IProcessInputSubscriber : implements
@@ -133,7 +117,6 @@ BlinkyGhost --|> AGhost
 
 
 
-Maze --> Block
 
 GameController --|> AGameSettings : extends
 
@@ -142,7 +125,6 @@ Sphere ..|> ISphere
 
 ISphere --> Position : have
 ICharacter --> Position : have
-Wall --> Position : have
 
 
 Pacman ..|> ICharacter
@@ -153,14 +135,12 @@ IMovable --- Direction
 ICharacter --> Direction
 
 
-Wall --|> Block
 Pacman --|> Block
 AGhost --|> Block
 PowerSphere --|> Block
 Sphere --|> Block
 
 AGhost ..|> ACollisionHandler
-Wall ..|> ACollisionHandler
 Sphere ..|> ACollisionHandler
 PowerSphere ..|> ACollisionHandler
 }
