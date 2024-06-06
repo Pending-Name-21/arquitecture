@@ -1,46 +1,33 @@
-@startuml input-listener-console
-package "Console" {
+@startuml input-listener-screen
+package "Input Listener" {
 
-    abstract class AEventListener {
-        +handler: AEventHandler
-        +native_listen(): List<String>
+    interface ISender {
+        +sendEvent(event: WindowEvent): void
     }
 
-    class KeyboardListener {
-        +handler: AEventHandler
-        +native_listen(): List<String>
+    class SocketClientSender {
+        +sendEvent(event: WindowEvent): void
     }
 
-    class MouseListener {
-        +handler: AEventHandler
-        +native_listen(): List<String>
-    }
-
-    AEventListener <|-- KeyboardListener
-    AEventListener <|-- MouseListener
+    ISender <|.. SocketClientSender
 
     abstract class AEventHandler {
-        -poolEvents: Vec<String>
+        ~sender: ISender
         +handleEvent(): void
-        +getPoolEvent(): Vec<String>
     }
 
     class KeyboardEventHandler {
-        -poolEvents: Vec<String>
         +handleEvent(): void
-        +getPoolEvent(): Vec<String>
     }
 
     class MouseEventHandler {
-        -poolEvents: Vec<String>
         +handleEvent(): void
-        +getPoolEvent(): Vec<String>
     }
 
     AEventHandler <|-- KeyboardEventHandler
     AEventHandler <|-- MouseEventHandler
 
-    AEventListener *-- AEventHandler 
+    AEventHandler o-- ISender
 
     class AppHandler {
         -eventHandlers: Vec<AEventHandler>
