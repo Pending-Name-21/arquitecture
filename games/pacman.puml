@@ -10,7 +10,6 @@ package "Update Handler" {
 !includesub ../uml/frontend-software-system/update-handler.puml!INTERFACE
 }
 
-
 package Pac-Man {
 
 class Position {
@@ -27,25 +26,22 @@ class PowerSphere
 {
  - sprite : Sprite
  - time : int
- - position: Position
- + collect() : int
  + activatePower() : void
 }
 
 class Sphere
 {
  - sprite : Sprite
- - position: Position
- + collect() : int
 }
 
-abstract class Ghost
+abstract class AGhost
 {
  - sprite : Sprite
- -state : string
- -color : string
- + fleePacman () : void
- + chasePacman () : void
+ - isChasing : bool
+ + fleePacman () : void {abstract}
+ + chasePacman () : void {abstract}
+ + move(direction : Direction) : bool
+
 }
 
 class ClydeGhost{}
@@ -65,13 +61,14 @@ class Pacman
  - sprite : Sprite
  - lives : int
  + hit() : bool
+ + isAlive(): bool
+ + move(direction : Direction) : bool
+
 }
 
 class Maze
 {
  - blocks : Block[][]
- - numberSpheres : int 
- - numberPowerSpheres : int 
  + generateMaze() : void
 }
 
@@ -79,13 +76,11 @@ class GameController
 {
  -maze : Maze
  - pacman : Pacman
- -ghosts : List<Ghost>
+ -ghosts : List<AGhost>
  -score : int
  + checkCollisions() : void
  + handleInput() : void
  + updateScore() : void
- + respawnCharacters() : void
- + activatePowerUp() : void
  + restart(): void
 }
 
@@ -102,18 +97,18 @@ interface ISphere
 }
 
 
-abstract class CollisionHandler {
-    + handleCollision() : void
-    + update() : void
+abstract class ACollisionHandler {
+    + handleCollision() : void {abstract}
+    + update() : void {abstract}
 }
 
-CollisionHandler <|-- PacmanGhostCollisionHandler
-CollisionHandler <|-- PacmanWallCollisionHandler
-CollisionHandler <|-- PacmanSphereCollisionHandler
-CollisionHandler <|-- PacmanPowerSphereCollisionHandler
-CollisionHandler <|-- GhostWallCollisionHandler
+ACollisionHandler <|-- PacmanGhostCollisionHandler
+ACollisionHandler <|-- PacmanWallCollisionHandler
+ACollisionHandler <|-- PacmanSphereCollisionHandler
+ACollisionHandler <|-- PacmanPowerSphereCollisionHandler
+ACollisionHandler <|-- GhostWallCollisionHandler
 
-CollisionHandler ..> UpdatePublisher
+ACollisionHandler ..> UpdatePublisher
 
 
 
@@ -140,18 +135,17 @@ class Block{
 GameController ..> ProcessInputPublisher: uses
 GameController ..|> IProcessInputSubscriber : implements
 GameController --> Pacman
-GameController --> Ghost
+GameController --> AGhost
 GameController --> Maze
 
 
-ClydeGhost --|> Ghost
-PinkyGhost --|> Ghost
-InkyGhost --|> Ghost
-BlinkyGhost --|> Ghost
+ClydeGhost --|> AGhost
+PinkyGhost --|> AGhost
+InkyGhost --|> AGhost
+BlinkyGhost --|> AGhost
 
 
-Pacman ..|> ICharacter
-Ghost ..|> ICharacter
+
 
 Maze --> Block
 
@@ -165,10 +159,9 @@ ICharacter --> Position : have
 Wall --> Position : have
 
 
-
-Pacman ..|> IMovable
-Ghost ..|> IMovable
-
+Pacman ..|> ICharacter
+AGhost ..|> ICharacter
+ICharacter ..|> IMovable
 IMovable --- Direction
 
 ICharacter --> Direction
@@ -176,14 +169,13 @@ ICharacter --> Direction
 
 Wall --|> Block
 Pacman --|> Block
-Ghost --|> Block
+AGhost --|> Block
 PowerSphere --|> Block
 Sphere --|> Block
 
-Ghost ..|> CollisionHandler
-Wall ..|> CollisionHandler
-Sphere ..|> CollisionHandler
-PowerSphere ..|> CollisionHandler
+AGhost ..|> ACollisionHandler
+Wall ..|> ACollisionHandler
+Sphere ..|> ACollisionHandler
+PowerSphere ..|> ACollisionHandler
 
-}
-@enduml
+}@enduml
