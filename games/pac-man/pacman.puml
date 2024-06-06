@@ -1,13 +1,13 @@
 @startuml
 package "Process Input Handler" {
-!includesub ../uml/frontend-software-system/process-input-handler.puml!INTERFACE
+!includesub ../../uml/frontend-software-system/process-input-handler.puml!INTERFACE
 }
 package "Render Handler" {
-!includesub ../uml/frontend-software-system/render-handler.puml!INTERFACE
+!includesub ../../uml/frontend-software-system/render-handler.puml!INTERFACE
 }
-!include ../uml/frontend-software-system/game-settings.puml
+!include ../../uml/frontend-software-system/game-settings.puml
 package "Update Handler" {
-!includesub ../uml/frontend-software-system/update-handler.puml!INTERFACE
+!includesub ../../uml/frontend-software-system/update-handler.puml!INTERFACE
 }
 
 package Pac-Man {
@@ -177,5 +177,6 @@ AGhost ..|> ACollisionHandler
 Wall ..|> ACollisionHandler
 Sphere ..|> ACollisionHandler
 PowerSphere ..|> ACollisionHandler
+}
 
-}@enduml
+@enduml
