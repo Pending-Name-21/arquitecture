@@ -1,0 +1,54 @@
+@startuml
+package "Characters" {
+  abstract class AGhost {
+   - sprite : Sprite
+   - isChasing : bool
+   + fleePacman () : void {abstract}
+   + chasePacman () : void {abstract}
+   + move(direction : Direction) : bool
+  }
+  AGhost <|-- ClydeGhost
+  AGhost <|-- PinkyGhost
+  AGhost <|-- InkyGhost
+  AGhost <|-- BlinkyGhost
+  AGhost ..|> ICharacter
+  AGhost --|> Block
+  AGhost ..|> ACollisionHandler
+
+  interface ICharacter {
+   - position: Position
+   - direction : Direction
+   + respawn (Position position) : void
+   + move (Position) : bool
+  }
+  ICharacter --> Position : have
+  ICharacter ..|> IMovable
+  ICharacter --> Direction
+
+  class Pacman {
+   - sprite : Sprite
+   - lives : int
+   + hit() : bool
+   + isAlive(): bool
+   + move(direction : Direction) : bool
+  }
+  Pacman ..|> ICharacter
+  Pacman --|> Block
+
+  interface IMovable {
+   + move(direction : Direction) : bool
+  }
+  IMovable --- Direction
+
+  class Direction {
+   - dx : int
+   - dy : int
+   + Direction(dx : int, dy : int)
+   + up() : Direction
+   + down() : Direction
+   + left() : Direction
+   + right() : Direction
+  }
+}
+@enduml
+

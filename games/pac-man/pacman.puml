@@ -13,136 +13,48 @@ package "Update Handler" {
 package Pac-Man {
 !include collisions.puml
 !include maze.puml
+!include characters.puml
+
+  class GameController {
+   -maze : Maze
+   -pacman : Pacman
+   -ghosts : List<AGhost>
+   -score : int
+   + checkCollisions() : void
+   + handleInput() : void
+   + updateScore() : void
+   + restart(): void
+  }
+  GameController ..> SoundFactory
+  GameController ..> SpriteFactory
+  GameController ..> ProcessInputPublisher: uses
+  GameController ..|> IProcessInputSubscriber : implements
+  GameController --> Pacman
+  GameController --> AGhost
+  GameController --> Maze
+  GameController --|> AGameSettings : extends
+
+  class PowerSphere {
+   - sprite : Sprite
+   - time : int
+   + activatePower() : void
+  }
+  PowerSphere ..|> ISphere
+  PowerSphere ..|> ACollisionHandler
+  PowerSphere --|> Block
+
+  class Sphere {
+   - sprite : Sprite
+  }
+  Sphere ..|> ISphere
+  Sphere --|> Block
+  Sphere ..|> ACollisionHandler
+
+  interface ISphere {
+   - postion : Position
+   + collect() : void
+  }
+  ISphere --> Position : have
 
 }
-
-class PowerSphere
-{
- - sprite : Sprite
- - time : int
- + activatePower() : void
-}
-
-class Sphere
-{
- - sprite : Sprite
-}
-
-abstract class AGhost
-{
- - sprite : Sprite
- - isChasing : bool
- + fleePacman () : void {abstract}
- + chasePacman () : void {abstract}
- + move(direction : Direction) : bool
-
-}
-
-class ClydeGhost{}
-class PinkyGhost{}
-class InkyGhost{}
-class BlinkyGhost{}
-
-interface ICharacter
-{
- - position: Position
- - direction : Direction
- + respawn (Position position) : void
- + move (Position) : bool
-}
-class Pacman 
-{
- - sprite : Sprite
- - lives : int
- + hit() : bool
- + isAlive(): bool
- + move(direction : Direction) : bool
-
-}
-
-class GameController
-{
- -maze : Maze
- - pacman : Pacman
- -ghosts : List<AGhost>
- -score : int
- + checkCollisions() : void
- + handleInput() : void
- + updateScore() : void
- + restart(): void
-}
-
-
-
-
-GameController ..> SoundFactory
-GameController ..> SpriteFactory
-
-interface ISphere
-{
- - postion : Position
- + collect() : void
-}
-
-
-class Direction {
- - dx : int
- - dy : int
- + Direction(dx : int, dy : int)
- + up() : Direction
- + down() : Direction
- + left() : Direction
- + right() : Direction
-}
-
-
-interface IMovable {
- + move(direction : Direction) : bool
-}
-
-
-
-GameController ..> ProcessInputPublisher: uses
-GameController ..|> IProcessInputSubscriber : implements
-GameController --> Pacman
-GameController --> AGhost
-GameController --> Maze
-
-
-ClydeGhost --|> AGhost
-PinkyGhost --|> AGhost
-InkyGhost --|> AGhost
-BlinkyGhost --|> AGhost
-
-
-
-
-
-GameController --|> AGameSettings : extends
-
-PowerSphere ..|> ISphere
-Sphere ..|> ISphere
-
-ISphere --> Position : have
-ICharacter --> Position : have
-
-
-Pacman ..|> ICharacter
-AGhost ..|> ICharacter
-ICharacter ..|> IMovable
-IMovable --- Direction
-
-ICharacter --> Direction
-
-
-Pacman --|> Block
-AGhost --|> Block
-PowerSphere --|> Block
-Sphere --|> Block
-
-AGhost ..|> ACollisionHandler
-Sphere ..|> ACollisionHandler
-PowerSphere ..|> ACollisionHandler
-}
-
 @enduml
