@@ -11,6 +11,7 @@ package "Update Handler" {
 }
 
 package Pac-Man {
+!include collisions.puml
 
 class Position {
  - x : int
@@ -95,21 +96,6 @@ interface ISphere
  - postion : Position
  + collect() : void
 }
-
-
-abstract class ACollisionHandler {
-    + handleCollision() : void {abstract}
-    + update() : void {abstract}
-}
-
-ACollisionHandler <|-- PacmanGhostCollisionHandler
-ACollisionHandler <|-- PacmanWallCollisionHandler
-ACollisionHandler <|-- PacmanSphereCollisionHandler
-ACollisionHandler <|-- PacmanPowerSphereCollisionHandler
-ACollisionHandler <|-- GhostWallCollisionHandler
-
-ACollisionHandler ..> UpdatePublisher
-
 
 
 class Direction {
