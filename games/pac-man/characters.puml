@@ -16,10 +16,10 @@ package "Characters" {
   AGhost ..|> ACollisionHandler
 
   interface ICharacter {
-   - position: Position
-   - direction : Direction
-   + respawn (Position position) : void
-   + move (Position) : bool
+   + position: Position { get; set; }
+   + direction: Direction { get; set; }
+   + respawn(Position position) : void
+   + move(Position) : bool
   }
   ICharacter --> Position : have
   ICharacter ..|> IMovable

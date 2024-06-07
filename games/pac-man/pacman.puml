@@ -51,7 +51,7 @@ package Pac-Man {
   Sphere ..|> ACollisionHandler
 
   interface ISphere {
-   - postion : Position
+   + position: Position { get; set; }
    + collect() : void
   }
   ISphere --> Position : have
