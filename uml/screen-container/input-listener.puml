@@ -1,0 +1,40 @@
+@startuml input-device-monitor-screen
+package "Input Device Monitor" {
+
+    interface ISender {
+        +sendEvent(event: WindowEvent): void
+    }
+
+    class SocketClientSender {
+        +sendEvent(event: WindowEvent): void
+    }
+
+    ISender <|.. SocketClientSender
+
+    abstract class AEventHandler {
+        ~sender: ISender
+        +handleEvent(): void
+    }
+
+    class KeyboardEventHandler {
+        +handleEvent(): void
+    }
+
+    class MouseEventHandler {
+        +handleEvent(): void
+    }
+
+    AEventHandler <|-- KeyboardEventHandler
+    AEventHandler <|-- MouseEventHandler
+
+    AEventHandler o-- ISender
+
+    class AppHandler {
+        -eventHandlers: Vec<AEventHandler>
+        +init(): void
+    }
+
+    AppHandler o-- AEventHandler  
+
+}
+@enduml
