@@ -34,27 +34,30 @@ package Pac-Man {
   GameController --> Maze
   GameController --|> AGameSettings : extends
 
+  interface ICollectable
+  {
+   + position: Position {get; set;}
+   + collect(): void
+  }
+
+  ICollectable --> Position
+  
   class PowerSphere {
    - sprite : Sprite
    - time : int
    + activatePower() : void
   }
-  PowerSphere ..|> ISphere
+  PowerSphere ..|> ICollectable
   PowerSphere ..|> ACollisionHandler
   PowerSphere --|> Block
 
   class Sphere {
    - sprite : Sprite
   }
-  Sphere ..|> ISphere
+  Sphere ..|> ICollectable
   Sphere --|> Block
   Sphere ..|> ACollisionHandler
 
-  interface ISphere {
-   + position: Position { get; set; }
-   + collect() : void
-  }
-  ISphere --> Position : have
 
 }
 @enduml
