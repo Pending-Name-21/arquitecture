@@ -2,12 +2,14 @@
 !include process-input-handler.puml
 !include game-settings.puml
 !include update-handler.puml
+!include render-handler.puml
 
 package "Game Loop" {
   class Game {
     -gameSettings : AGameSettings
     -inputVerifier : InputVerifier
     -updatePublisher : UpdatePublisher
+    -renderManager : RenderManager
 
     -processInput() : void
     -update() : void
@@ -18,5 +20,6 @@ package "Game Loop" {
   Game --> AGameSettings
   Game --> InputVerifier
   Game --> UpdatePublisher
+  Game --> RenderManager
 }
 @enduml

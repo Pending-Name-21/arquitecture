@@ -1,0 +1,9 @@
+@startuml
+package "Sound Manager"{
+    class Audio {
+    +play(path: &str, duration: u64, volume: f32) : void
+    +play_playlist(paths: Vec<String>, loop_playlist: bool, random: bool, volume: f32) : void
+    +play_simple(path: &str) : void
+    }
+}
+@enduml

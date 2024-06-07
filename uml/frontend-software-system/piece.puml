@@ -1,8 +1,8 @@
 @startuml
-package "Piece" {
+package "Render Handler" {
     class Coord {
-         x : Integer
-         y : Integer
+        x : Integer
+        y : Integer
     }
 
     class Size {
@@ -15,16 +15,19 @@ package "Piece" {
     }
 
     class Sprite {
-         position : Coord
-         size : Size
-         isHidden : boolean
+        position : Coord
+        size : Size
+        isHidden : boolean
+        -sound : Sound
+        +getSound() : Sound
     }
     Sprite --> Coord
     Sprite --> Size
+    Sprite o-- Sound : can has
     Sprite ..|> IFile
 
     abstract class Sound {
-      {abstract} canPlay() : boolean
+        {abstract} canPlay() : boolean
     }
     Sound ..|> IFile
 }
