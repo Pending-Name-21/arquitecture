@@ -1,5 +1,5 @@
-@startuml input-listener-screen
-package "Input Listener" {
+@startuml input-device-monitor-screen
+package "Input Device Monitor" {
 
     interface ISender {
         +sendEvent(event: WindowEvent): void
