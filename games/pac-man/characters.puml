@@ -3,6 +3,7 @@ package "Characters" {
   abstract class AGhost {
    - sprite : Sprite
    - isChasing : bool
+   - block : Block
    + fleePacman () : void {abstract}
    + chasePacman () : void {abstract}
    + move(direction : Direction) : bool
@@ -12,7 +13,7 @@ package "Characters" {
   AGhost <|-- InkyGhost
   AGhost <|-- BlinkyGhost
   AGhost ..|> ICharacter
-  AGhost --|> Block
+  AGhost --> Block
   AGhost ..|> ACollisionHandler
 
   interface ICharacter {
@@ -28,12 +29,13 @@ package "Characters" {
   class Pacman {
    - sprite : Sprite
    - lives : int
+   - block : Block
    + hit() : bool
    + isAlive(): bool
    + move(direction : Direction) : bool
   }
   Pacman ..|> ICharacter
-  Pacman --|> Block
+  Pacman --> Block
 
   interface IMovable {
    + move(direction : Direction) : bool

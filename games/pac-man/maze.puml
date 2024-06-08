@@ -4,11 +4,16 @@ package "Map" {
    - position : Position
   }
 
-  class Maze {
+    class Maze {
    - blocks : Block[][]
+   - pacman : Pacman
+   - ghosts : AGhost[]
    + generateMaze() : void
   }
   Maze --> Block
+  Maze --> Pacman
+  Maze --> AGhost
+
 
 
   class Wall {
