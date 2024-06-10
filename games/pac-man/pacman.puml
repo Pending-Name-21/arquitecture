@@ -20,10 +20,12 @@ package Pac-Man {
    -pacman : Pacman
    -ghosts : List<AGhost>
    -score : int
+   -collisionHandler : ACollisionHandler
    + checkCollisions() : void
    + handleInput() : void
    + updateScore() : void
    + restart(): void
+   + handleCollision(character : ICharacter, block : Block) : void
   }
   GameController ..> SoundFactory
   GameController ..> SpriteFactory
@@ -33,6 +35,7 @@ package Pac-Man {
   GameController --> AGhost
   GameController --> Maze
   GameController --|> AGameSettings : extends
+  GameController --> ACollisionHandler
 
   interface ICollectable
   {

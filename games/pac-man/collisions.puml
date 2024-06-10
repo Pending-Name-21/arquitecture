@@ -1,16 +1,32 @@
 @startuml
 package "Collisions" {
-
   abstract class ACollisionHandler {
-      + handleCollision() : void {abstract}
-      + update() : void {abstract}
+   + checkCollision(character : ICharacter, block : Block) : bool {abstract}
   }
-  ACollisionHandler <|-- PacmanGhostCollisionHandler
-  ACollisionHandler <|-- PacmanWallCollisionHandler
-  ACollisionHandler <|-- PacmanSphereCollisionHandler
-  ACollisionHandler <|-- PacmanPowerSphereCollisionHandler
-  ACollisionHandler <|-- GhostWallCollisionHandler
-  ACollisionHandler ..> UpdatePublisher
 
+  interface ICollisionHandler {
+   + checkCollision(character : ICharacter, block : Block) : bool
+  }
+  ICollisionHandler ..|> ACollisionHandler
+
+  class WallCollisionHandler {
+   + checkCollision(character : ICharacter, block : Block) : bool
+  }
+  WallCollisionHandler ..|> ACollisionHandler
+
+  class PacManCollisionHandler {
+   + checkCollision(character : ICharacter, block : Block) : bool
+  }
+  PacManCollisionHandler ..|> ACollisionHandler
+
+  class PowerSphereCollisionHandler {
+   + checkCollision(character : ICharacter, block : Block) : bool
+  }
+  PowerSphereCollisionHandler ..|> ACollisionHandler
+
+  class SphereCollisionHandler {
+   + checkCollision(character : ICharacter, block : Block) : bool
+  }
+  SphereCollisionHandler ..|> ACollisionHandler
 }
 @enduml
