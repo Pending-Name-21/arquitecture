@@ -25,7 +25,6 @@ package "GUI Handler" {
         +setLanguage(language : String) : void
         }
 
-    SpritesReader --> ScreenManager : sends sprites to
     ScreenManager o-- ScreenMapper : has
     ScreenManager --> ScreenSettings : uses settings
 }
