@@ -8,7 +8,6 @@ package "Characters" {
   abstract class AGhost {
     - origin: Position
    - sprite : Sprite
-   - position: Position
    - block : Block
    + {abstract} flee() : void
    + {abstract} chase(pacmanPosition: Position) : void
@@ -34,7 +33,7 @@ package "Characters" {
   Pacman ..|> IRespawnable
 
   class Movement {
-   - position: Position
+   - block : Block
    - up() : void
    - down() : void
    - left() : void

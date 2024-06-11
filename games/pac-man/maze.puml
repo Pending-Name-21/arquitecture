@@ -1,33 +1,19 @@
 @startuml
-package "Map" {
-  class Block{
-   - position : Position
-  }
-
-    class Maze {
-   - blocks : Block[][]
-   - pacman : Pacman
-   - ghosts : AGhost[]
-   + generateMaze() : void
-  }
-  Maze --> Block
-  Maze --> Pacman
-  Maze --> AGhost
-
-
-
-  class Wall {
-    - sprite : Sprite
-      - position: Position
-  }
-  Wall --|> Block
-  Wall --> Position : have
-  Wall ..|> ACollisionHandler
-
+package Map {
   class Position {
    - x : int
    - y : int
   }
 
+  class Block {
+   - position : Position
+  }
+  Block --> Position
+
+  class Maze {
+   - maze: Block[][]
+  }
+  Maze "1" o-- "many" Block
 }
 @enduml
+

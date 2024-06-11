@@ -61,6 +61,18 @@ package Pac-Man {
   Sphere --|> Block
   Sphere ..|> ACollisionHandler
 
+  package Wall {
+    class Wall {
+     - sprite : Sprite
+     - blocks : Block[]
+    }
+    Wall "1" o-- "many" Block
+    Wall ..|> ACollisionHandler
 
+    class WallManager {
+      + populate(maze: Maze)
+    }
+    WallManager --> Wall
+  }
 }
 @enduml
