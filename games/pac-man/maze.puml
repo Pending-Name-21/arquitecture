@@ -1,8 +1,5 @@
 @startuml
 package Map {
-  class Position {
-   - x : int
-   - y : int
   }
 
   /'

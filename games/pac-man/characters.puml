@@ -1,5 +1,10 @@
 @startuml
 package "Characters" {
+  class Position {
+   - x : int
+   - y : int
+  }
+
   abstract class ACharacter {
    - spawnPosition: Position
    - position: Position
