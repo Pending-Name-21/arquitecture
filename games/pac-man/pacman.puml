@@ -14,7 +14,7 @@ package Pac-Man {
 !include collisions.puml
 !include maze.puml
 !include characters.puml
-
+!include collectables.puml
   class GameController {
    -maze : Maze
    -pacman : Pacman
@@ -37,37 +37,15 @@ package Pac-Man {
   GameController --|> AGameSettings : extends
   GameController --> ACollisionHandler
 
-  interface ICollectable
-  {
-   + position: Position {get; set;}
-   + collect(): void
-  }
 
-  ICollectable --> Position
-  
-  class PowerSphere {
-   - sprite : Sprite
-   - time : int
-   + activatePower() : void
   }
-  PowerSphere ..|> ICollectable
-  PowerSphere ..|> ACollisionHandler
-  PowerSphere --|> Block
-
-  class Sphere {
-   - sprite : Sprite
-  }
-  Sphere ..|> ICollectable
-  Sphere --|> Block
-  Sphere ..|> ACollisionHandler
 
   package Wall {
     class Wall {
      - sprite : Sprite
      - blocks : Block[]
     }
-    Wall "1" o-- "many" Block
-    Wall ..|> ACollisionHandler
+    Wall "1" *-- "many" Block
 
     class WallManager {
       + populate(maze: Maze)

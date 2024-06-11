@@ -1,0 +1,24 @@
+@startuml
+package Collectables {
+  abstract class APowerUp {
+   - sprite : Sprite
+   - block: Block
+  }
+  APowerUp ..|> ICollisionSubscriber
+  ' TODO: a PowerSphere has a time duration
+  APowerUp <|-- PowerSphere
+
+  class Sphere {
+   - sprite: Sprite
+   - block: Block
+  }
+  Sphere ..|> ICollisionSubscriber
+
+  class CollectablesGenerator {
+    + populate(maze: Maze)
+  }
+  CollectablesGenerator ..> APowerUp: <<instantiate>>
+  CollectablesGenerator ..> Sphere: <<instantiate>>
+}
+@enduml
+
