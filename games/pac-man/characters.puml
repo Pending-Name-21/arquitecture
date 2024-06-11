@@ -1,56 +1,47 @@
 @startuml
 package "Characters" {
+
+  interface IRespawnable {
+    + respawn(): void
+  }
+
   abstract class AGhost {
+    - origin: Position
    - sprite : Sprite
-   - isChasing : bool
+   - position: Position
    - block : Block
-   + fleePacman () : void {abstract}
-   + chasePacman () : void {abstract}
-   + move(direction : Direction) : bool
+   + {abstract} flee() : void
+   + {abstract} chase(pacmanPosition: Position) : void
   }
   AGhost <|-- ClydeGhost
   AGhost <|-- PinkyGhost
   AGhost <|-- InkyGhost
   AGhost <|-- BlinkyGhost
-  AGhost ..|> ICharacter
   AGhost --> Block
   AGhost ..|> ACollisionHandler
-
-  interface ICharacter {
-   + position: Position { get; set; }
-   + direction: Direction { get; set; }
-   + respawn(Position position) : void
-   + move(Position) : bool
-  }
-  ICharacter --> Position : have
-  ICharacter ..|> IMovable
-  ICharacter --> Direction
+  AGhost ..|> IRespawnable
+  AGhost ..|> IUpdateSubscriber
 
   class Pacman {
    - sprite : Sprite
-   - lives : int
+   - origin: Position
+   - amountLives: int
    - block : Block
+   - movement: Movement
    + hit() : bool
-   + isAlive(): bool
-   + move(direction : Direction) : bool
   }
-  Pacman ..|> ICharacter
   Pacman --> Block
+  Pacman ..|> IRespawnable
 
-  interface IMovable {
-   + move(direction : Direction) : bool
+  class Movement {
+   - position: Position
+   - up() : void
+   - down() : void
+   - left() : void
+   - right() : void
   }
-  IMovable --- Direction
-
-  class Direction {
-   - dx : int
-   - dy : int
-   + Direction(dx : int, dy : int)
-   + up() : Direction
-   + down() : Direction
-   + left() : Direction
-   + right() : Direction
-  }
+  Movement ..|> IProcessInputSubscriber
+  Movement --o Pacman
 }
 @enduml
 
