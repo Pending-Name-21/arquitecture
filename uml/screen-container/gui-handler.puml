@@ -1,0 +1,51 @@
+@startuml
+
+package "Screen Handler" {
+    class EventType {
+        type : String
+        sprite : Sprite
+    }
+
+    class SpritesReader {
+        +readSprites() : List<Sprite>
+    }
+
+    class ScreenManager {
+        -sprites : List<Sprite>
+        -mapper : ScreenMapper
+        -events : ScreenEvents
+        -settings : ScreenSettings
+        +showSprites(sprites : List<Sprite>)
+    }
+
+    class ScreenMapper {
+        +showSprites(sprites : List<Sprite>)
+        +updateSprite(sprite : Sprite)
+    }
+
+    class ScreenEvents {
+        +listenEvents() : void
+        +onEvent(event : EventType) : void
+    }
+
+    class ScreenSettings {
+        soundVolume : Double
+        musicVolume : Double
+        language : String
+        +getSoundVolume() : Double
+        +setSoundVolume(volume : Double) : void
+        +getMusicVolume() : Double
+        +setMusicVolume(volume : Double) : void
+        +getLanguage() : String
+        +setLanguage(language : String) : void
+        }
+
+    SpritesReader --> ScreenManager : sends sprites to
+    ScreenManager o-- ScreenMapper : has
+    ScreenManager o-- ScreenEvents : listens for
+    ScreenEvents o-- EventType : has
+    ScreenEvents --> ScreenMapper : updates
+    ScreenManager --> ScreenSettings : uses settings
+}
+
+@enduml
