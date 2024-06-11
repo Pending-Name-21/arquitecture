@@ -5,15 +5,24 @@ package Map {
    - y : int
   }
 
+  /'
+    A collision is when a body enters a block that already has other bodies.
+    A block can have 0 or more bodies
+  '/
   class Block {
-   - position : Position
+   - maze: Maze
+   - bodies: List<Body>
+   + enter(body: Body): void
+   + exit(body: Body): void
   }
-  Block --> Position
+  Block "1" *-- "many" Body
+  Block ..> Nature: <<use>>
+  Block ..> ICollisionSubscriber: <<use>>
 
   class Maze {
    - maze: Block[][]
   }
-  Maze "1" o-- "many" Block
+  Maze "1" *-- "many" Block
 }
 @enduml
 
