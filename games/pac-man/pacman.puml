@@ -16,29 +16,23 @@ package Pac-Man {
 !include characters.puml
 !include collectables.puml
   class GameController {
-   -maze : Maze
-   -pacman : Pacman
-   -ghosts : List<AGhost>
-   -score : int
-   -collisionHandler : ACollisionHandler
-   + checkCollisions() : void
-   + handleInput() : void
-   + updateScore() : void
-   + restart(): void
-   + handleCollision(character : ICharacter, block : Block) : void
+   - pacman: Pacman
   }
-  GameController ..> SoundFactory
-  GameController ..> SpriteFactory
-  GameController ..> ProcessInputPublisher: uses
-  GameController ..|> IProcessInputSubscriber : implements
-  GameController --> Pacman
-  GameController --> AGhost
-  GameController --> Maze
-  GameController --|> AGameSettings : extends
-  GameController --> ACollisionHandler
+  GameController ..> Pacman: <<uses>>
+  GameController ..|> AGameSettings
 
-
+  class GameInitializer {
+    + init(): void
   }
-
+  GameInitializer ..> GhostGenerator: <<creates>>
+  GameInitializer ..> Maze: <<creates>>
+  GameInitializer ..> CollectablesGenerator: <<creates>>
+  GameInitializer ..> Pacman: <<instatiates>>
+  GameInitializer ..> GameController: <<instatiates>>
+  GameInitializer ..> SpriteFactory: <<uses>>
+  GameInitializer ..> SoundFactory: <<uses>>
 }
+
+GameInitializer --( IIinitializerSubscriber: <<requires>>
 @enduml
+
