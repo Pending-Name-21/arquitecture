@@ -40,17 +40,5 @@ package Pac-Man {
 
   }
 
-  package Wall {
-    class Wall {
-     - sprite : Sprite
-     - blocks : Block[]
-    }
-    Wall "1" *-- "many" Block
-
-    class WallManager {
-      + populate(maze: Maze)
-    }
-    WallManager --> Wall
-  }
 }
 @enduml
