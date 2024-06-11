@@ -1,6 +1,6 @@
 @startuml
 
-package "Screen Handler" {
+package "GUI Handler" {
     class EventType {
         type : String
         sprite : Sprite
