@@ -1,46 +1,54 @@
 @startuml
 package "Characters" {
-
-  interface IRespawnable {
-    + respawn(): void
+  abstract class ACharacter {
+   - spawnPosition: Position
+   - position: Position
+   - current: Block
+   + spawn(): void
   }
+  ACharacter "1" *-- "1" Position
 
-  abstract class AGhost {
-    - origin: Position
-   - sprite : Sprite
-   - block : Block
-   + {abstract} flee() : void
-   + {abstract} chase(pacmanPosition: Position) : void
+  package Ghost {
+    class GhostGenerator {
+      + populate(maze: Maze): void
+      - spawnGhost(): Ghost
+    }
+    GhostGenerator ..> Ghost: <<instantiate>>
+
+    interface IChase {
+      chase(target: Position): Position
+    }
+    IChase <|.. ClydeChaser
+    IChase <|.. PinkyChaser
+    IChase <|.. InkyChaser
+    IChase <|.. BlinkyChaser
+
+    class Ghost {
+     - sprite : Sprite
+     - target: Pacman
+     - chaseBehaviour: IChase
+     + flee() : void
+    }
+    Ghost ..|> IUpdateSubscriber
+    Ghost ..> IChase: <<call>>
+    Ghost --|> ACharacter
+    Ghost ..|> ICollisionSubscriber
   }
-  AGhost <|-- ClydeGhost
-  AGhost <|-- PinkyGhost
-  AGhost <|-- InkyGhost
-  AGhost <|-- BlinkyGhost
-  AGhost --> Block
-  AGhost ..|> ACollisionHandler
-  AGhost ..|> IRespawnable
-  AGhost ..|> IUpdateSubscriber
 
   class Pacman {
    - sprite : Sprite
-   - origin: Position
    - amountLives: int
-   - block : Block
-   - movement: Movement
-   + hit() : bool
-  }
-  Pacman --> Block
-  Pacman ..|> IRespawnable
-
-  class Movement {
-   - block : Block
+   - hasPowerSphere: boolean
+   - character: ACharacter
+   + hit() : void
    - up() : void
    - down() : void
    - left() : void
    - right() : void
   }
-  Movement ..|> IProcessInputSubscriber
-  Movement --o Pacman
+  Pacman --|> ACharacter
+  Pacman ..|> ICollisionSubscriber
+  Pacman ..|> IProcessInputSubscriber
 }
 @enduml
 
