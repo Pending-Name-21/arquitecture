@@ -35,17 +35,21 @@ package "Render Handler" {
         +createSprite() : Sprite
     }
 
-    class SpriteFactory implements ISpriteFactory {
-        +createSprite() : Sprite
-    }
-
     interface ISoundFactory {
         +createSound() : Sound
     }
 
-    class SoundFactory implements ISoundFactory {
+!startsub INTERFACE
+    class SpriteFactory  {
+        +createSprite() : Sprite
+    }
+
+    class SoundFactory  {
         +createSound() : Sound
     }
+!endsub
+    SpriteFactory ..|> ISpriteFactory
+    SoundFactory ..|> ISoundFactory
 
     RenderManager o-- SpriteRenderer : uses
     RenderManager o-- SoundPlayer : uses

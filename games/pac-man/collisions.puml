@@ -1,0 +1,24 @@
+@startuml
+/'
+  TODO: By applying dependency injection the collisions can be handled by a CollisionsHandler
+  instead of the element itself.
+'/
+package "Collisions" {
+  ' collided WITH x
+  ' have been collided BY x
+  enum Nature {
+    WITH,
+    BY
+  }
+
+  interface ICollisionSubscriber {
+    + handleCollision(bodies: String[], nature: Nature): void
+  }
+
+  class Body {
+    - identifier: String
+    - element: ICollisionSubscriber
+  }
+}
+@enduml
+

@@ -1,0 +1,59 @@
+@startuml
+package "Characters" {
+  class Position {
+   - x : int
+   - y : int
+  }
+
+  abstract class ACharacter {
+   - spawnPosition: Position
+   - position: Position
+   - current: Block
+   + spawn(): void
+  }
+  ACharacter "1" *-- "1" Position
+
+  package Ghost {
+    class GhostGenerator {
+      + populate(maze: Maze): void
+      - spawnGhost(): Ghost
+    }
+    GhostGenerator ..> Ghost: <<instantiate>>
+
+    interface IChase {
+      chase(target: Position): Position
+    }
+    IChase <|.. ClydeChaser
+    IChase <|.. PinkyChaser
+    IChase <|.. InkyChaser
+    IChase <|.. BlinkyChaser
+
+    class Ghost {
+     - sprite : Sprite
+     - target: Pacman
+     - chaseBehaviour: IChase
+     + flee() : void
+    }
+    Ghost ..|> IUpdateSubscriber
+    Ghost ..> IChase: <<call>>
+    Ghost --|> ACharacter
+    Ghost ..|> ICollisionSubscriber
+  }
+
+  class Pacman {
+   - sprite : Sprite
+   - amountLives: int
+   - hasPowerSphere: boolean
+   - character: ACharacter
+   + hit() : void
+   - up() : void
+   - down() : void
+   - left() : void
+   - right() : void
+  }
+  Pacman --|> ACharacter
+  Pacman ..|> ICollisionSubscriber
+  Pacman ..|> IProcessInputSubscriber
+}
+@enduml
+

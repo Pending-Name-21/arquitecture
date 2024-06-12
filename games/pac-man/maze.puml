@@ -1,0 +1,40 @@
+@startuml
+package Map {
+  interface IBlock {
+    canEnter(): boolean
+  }
+  class WallBlock {
+    - sprite: Sprite
+  }
+  WallBlock ..|> IBlock
+
+  class SpawnBlock {
+    - sprite: Sprite
+   + exit(body: Body): void
+  }
+  SpawnBlock ..|> IBlock
+
+  class Maze {
+   - maze: IBlock[][]
+   + populate(): void
+  }
+  Maze ..> IBlock: <<instatiates>>
+
+  class StepBlock {
+  /'
+    A collision is when a body enters a block that already has other bodies.
+    A block can have 0 or more bodies
+  '/
+   - sprite: Sprite
+   - maze: Maze
+   - bodies: List<Body>
+   + enter(body: Body): void
+   + exit(body: Body): void
+  }
+  StepBlock "1" *-- "many" Body
+  StepBlock ..> Nature: <<use>>
+  StepBlock ..> ICollisionSubscriber: <<use>>
+  StepBlock ..|> IBlock
+}
+@enduml
+

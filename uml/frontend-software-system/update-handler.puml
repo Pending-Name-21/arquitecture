@@ -1,5 +1,6 @@
 @startuml
 package "Update Handler" {
+!startsub INTERFACE
   interface IUpdateSubscriber {
     +notify() : void
   }
@@ -10,5 +11,6 @@ package "Update Handler" {
     +notifySubscribers() : void
   }
   UpdatePublisher o-- IUpdateSubscriber
+!endsub
 }
 @enduml
