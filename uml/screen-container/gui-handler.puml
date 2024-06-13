@@ -1,32 +1,32 @@
 @startuml
 
 package "GUI Handler" {
-    class ScreenManager {
-        -sprites : List<Sprite>
-        -mapper : ScreenMapper
-        -settings : ScreenSettings
-        +showSprites(sprites : List<Sprite>)
+    class Sprite {
+        +Point2 position
+        +wgpu::Texture texture
+        +Option<Vec2> dimensions
+
+        +create_texture_from_image(app: &App, image_file: &str): wgpu::Texture
+        +new_sprite(texture: wgpu::Texture, pos_x: f32, pos_y: f32): Sprite
+        +new_with_size(texture: wgpu::Texture, pos_x: f32, pos_y: f32, width: f32, height: f32): Sprite
     }
 
-    class ScreenMapper {
-        +showSprites(sprites : List<Sprite>)
-        +updateSprite(sprite : Sprite)
+    class SpriteList {
+        +HashMap<String, Sprite> sprites
+
+        +new(): SpriteList
+        +add_sprite(app: &App, image_file: &str, key_name: &str, pos_x: f32, pos_y: f32)
+        +add_sprite_dim(app: &App, image_file: &str, key_name: &str, pos_x: f32, pos_y: f32, width: f32, height: f32)
+        +update_sprite(key: &str, pos_x: f32, pos_y: f32, width: Option<f32>, height: Option<f32>)
+        +remove_sprite(key: &str)
     }
 
-    class ScreenSettings {
-        soundVolume : Double
-        musicVolume : Double
-        language : String
-        +getSoundVolume() : Double
-        +setSoundVolume(volume : Double) : void
-        +getMusicVolume() : Double
-        +setMusicVolume(volume : Double) : void
-        +getLanguage() : String
-        +setLanguage(language : String) : void
-        }
+    class Utils {
+        +load_image(filename: &str): DynamicImage
+    }
 
-    ScreenManager o-- ScreenMapper : has
-    ScreenManager --> ScreenSettings : uses settings
+    SpriteList *-- Sprite : contains
+    Sprite --> Utils : uses
 }
 
 @enduml
