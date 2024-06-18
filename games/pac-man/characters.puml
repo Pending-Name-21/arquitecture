@@ -1,5 +1,11 @@
 @startuml
 package "Characters" {
+
+  class Score {
+    amountPoints: int
+    text: Text
+  }
+
   class Position {
    - x : int
    - y : int
@@ -45,6 +51,7 @@ package "Characters" {
    - amountLives: int
    - hasPowerSphere: boolean
    - character: ACharacter
+   - score: Score
    + hit() : void
    - up() : void
    - down() : void
@@ -54,6 +61,7 @@ package "Characters" {
   Pacman --|> ACharacter
   Pacman ..|> ICollisionSubscriber
   Pacman ..|> IProcessInputSubscriber
+  Pacman ..> Score: <<uses>>
 }
 @enduml
 

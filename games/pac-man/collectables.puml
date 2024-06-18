@@ -11,6 +11,7 @@ package Collectables {
   class Sphere {
    - sprite: Sprite
    - block: Block
+   {static} int value /' it should be 10 according to PRD '/
   }
   Sphere ..|> ICollisionSubscriber
 
