@@ -1,4 +1,6 @@
 @startuml
+skinparam linetype polyline
+
 package "Process Input Handler" {
 !includesub ../../uml/frontend-software-system/process-input-handler.puml!INTERFACE
 }
