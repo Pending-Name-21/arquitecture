@@ -21,18 +21,23 @@ package "Process Input Handler" {
 
   class InputVerifier {
     -processInputPublisher : ProcessInputPublisher
-    -inputListeners : List<InputListener>
+    -eventBuffers: AEventBuffer[]
 
     +check() : void
   }
-  InputVerifier o-- ProcessInputPublisher : fetches required events
-  InputVerifier o-- InputListener : fetches events
+  InputVerifier ..> ProcessInputPublisher: <<uses>>
+  InputVerifier ..> AEventBuffer: <<uses>>
 
-  interface InputListener {
-    ~listen() : List<String>
+  abstract class AEventBuffer {
+      -buffer: Queue
+      ~consume(): EventType[]
+      +feed(events: EventType[]): void
   }
-
-  KeyboardListener ..|> InputListener
-  MouseListener ..|> InputListener
+  note right of AEventBuffer::buffer
+    a shared resource between threads
+  end note
+  AEventBuffer <|-- KeyboardBuffer
+  AEventBuffer <|-- MouseBuffer
 }
 @enduml
+
