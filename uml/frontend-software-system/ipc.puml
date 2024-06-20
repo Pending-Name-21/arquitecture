@@ -1,0 +1,21 @@
+@startuml
+package ipc {
+    class SocketServer {
+        +start(): void
+        +stop(): void
+    }
+
+    ' The channel
+    class SocketClient {
+        ~sendDataToServer(data: Frame, socketPath: String): void
+    }
+
+    ' The transmitter
+    class Serializator {
+        -socketClient: SocketClient
+        +serializeToJson(frame: Frame): String
+    }
+    Serializator ..> SocketClient: <<uses>>
+}
+@enduml
+
