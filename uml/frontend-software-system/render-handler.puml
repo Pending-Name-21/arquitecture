@@ -2,14 +2,14 @@
 package "Render Handler" {
     ' source
     class RenderManager {
-        -serializator: Serializator
+        -transmitter: Transmitter
         -spriteRenderer : SpriteRenderer
         -soundPlayer : SoundPlayer
 
         +renderSprites() : void
         +playSounds() : void
     }
-    RenderManager ..> Serializator: <<uses>>
+    RenderManager ..> Transmitter: <<uses>>
     RenderManager ..> Frame: <<create>>
 
     class SpriteRenderer {
@@ -69,3 +69,4 @@ package "Render Handler" {
     Frame "1" *-- "many" Sound
 }
 @enduml
+

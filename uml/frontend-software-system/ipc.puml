@@ -19,17 +19,21 @@ Server
     }
     Receiever ..> AEventBuffer: <<uses>>
 
+/'
+------------------------------
+Client
+------------------------------
+'/
     ' The channel
     class SocketClient {
         ~sendDataToServer(data: Frame, socketPath: String): void
     }
 
-    ' The transmitter
-    class Serializator {
+    class Transmitter {
         -socketClient: SocketClient
         +serializeToJson(frame: Frame): String
     }
-    Serializator ..> SocketClient: <<uses>>
+    Transmitter ..> SocketClient: <<uses>>
 }
 @enduml
 
