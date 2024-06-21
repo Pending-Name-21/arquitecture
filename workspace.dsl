@@ -1,14 +1,9 @@
 workspace "Game Engine" "Game development using high-level languages" {
 
     model {
-        coffeTime = softwareSystem "Coffe Time" "Game Development" {
-            server = container "Socket server" "Recieves data" {
-                socket_server = component "Socket server" "Recieves data"
-            }
+        coffee_time = softwareSystem "Coffee Time" "Game engine" {
             screen = container "Screen" "Handles the output of a game such as graphics or sound" {
-                s_socket_client = component "Socket Client" "Sends data" {
-                    this -> socket_server "sends input data"
-                }
+                s_socket_client = component "Socket Client" "Sends data"
                 s_socket_server = component "Socket Server" "Recieves data"
 
                 input_monitor = component "Input device monitor" "Listens for input devices events" {
@@ -23,27 +18,18 @@ workspace "Game Engine" "Game development using high-level languages" {
                     s_socket_server -> this "Delivers data"
                 }
             }
-            console = container "Console" "Library to perform low-level operations" {
-                c_socket_client = component "Socket Client" "Sends data" {
-                    this -> s_socket_server "sends output data"
-                }
-                output_intermediate = component "Output intermediate" "Routines to send data" {
-                    this -> c_socket_client "writes output data"
-                }
-                input_intermediate = component "Input intermediate" "Routines to read input events" {
-                    this -> socket_server "reads for input events"
-                }
-            }
-
 
             bridge = container "Bridge" "Represents the contract to interact with the console" {
-                this -> console "calls routines to handle low-level operations"
+                ipc = component "Inter Process Communication" "Enables external communication" {
+                    this -> s_socket_server "sends output data"
+                    this -> s_socket_client "writes output data"
+                }
 
                 render_handler = component "Render handler" "Responsible for the graphical components of the game" {
-                    this -> output_intermediate "Sends output data"
+                    this -> ipc "Sends output data"
                 }
                 process_input_handler = component "Process input handler" "Responsible for processing input events" {
-                    this -> input_intermediate "sends a request for input events"
+                    this -> ipc "sends a request for input events"
                 }
                 game_settings = component "Game Settings" "It's where the game settings reside"
                 update_handler = component "Update Handler" "Handles update stage events"
@@ -54,10 +40,12 @@ workspace "Game Engine" "Game development using high-level languages" {
                     this -> game_settings "Checks for conditions that affect the loop"
                 }
             }
+
+            s_socket_client -> ipc "sends input data"
         }
 
         player = person "Player" "Plays games" {
-            this -> coffeTime "Loads games"
+            this -> coffee_time "Loads games"
         }
 
         gameDev = person "Game developer" "A developer that want's to create new games" {

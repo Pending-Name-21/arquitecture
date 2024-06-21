@@ -1,14 +1,16 @@
 @startuml
-!include piece.puml
-
 package "Render Handler" {
+    ' source
     class RenderManager {
+        -transmitter: Transmitter
         -spriteRenderer : SpriteRenderer
         -soundPlayer : SoundPlayer
 
         +renderSprites() : void
         +playSounds() : void
     }
+    RenderManager ..> Transmitter: <<uses>>
+    RenderManager ..> Frame: <<create>>
 
     class SpriteRenderer {
         -sprites : Sprite[]
@@ -57,5 +59,14 @@ package "Render Handler" {
     RenderManager o-- SoundFactory : creates sounds
     SpriteRenderer *-- Sprite : manipulates
     SoundPlayer *-- Sound : manipulates
+
+    ' The message
+    class Frame {
+        -sound: Sound
+        -sprite: Sprite
+    }
+    Frame "1" *-- "many" Sprite
+    Frame "1" *-- "many" Sound
 }
 @enduml
+

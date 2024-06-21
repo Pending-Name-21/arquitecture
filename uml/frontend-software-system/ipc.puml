@@ -1,0 +1,39 @@
+@startuml
+package ipc {
+/'
+------------------------------
+Server
+------------------------------
+'/
+    ' The channel
+    class SocketServer {
+        -receiever: Receiever
+        +start(): void
+        +stop(): void
+    }
+    SocketServer ..> Receiever: <<uses>>
+
+    class Receiever {
+        -eventBuffers: AEventBuffer[]
+        +process(data: ByteArray): void
+    }
+    Receiever ..> AEventBuffer: <<uses>>
+
+/'
+------------------------------
+Client
+------------------------------
+'/
+    ' The channel
+    class SocketClient {
+        ~sendDataToServer(data: Frame, socketPath: String): void
+    }
+
+    class Transmitter {
+        -socketClient: SocketClient
+        +serializeToJson(frame: Frame): String
+    }
+    Transmitter ..> SocketClient: <<uses>>
+}
+@enduml
+
