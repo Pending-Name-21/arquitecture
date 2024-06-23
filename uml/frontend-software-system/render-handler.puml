@@ -33,8 +33,6 @@ package "Render Handler" {
 
         +addSound(sound : Sound) : void
         +removeSound(sound : Sound) : void
-        +removeSoundFromSprite(sprite : Sprite) : void
-        +playSound(sprite : Sprite) : void
         +playSound(sound : Sound) : void
     }
     SoundPlayer *-- Sound : manipulates
