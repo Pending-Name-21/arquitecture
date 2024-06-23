@@ -18,12 +18,9 @@ package "Render Handler" {
         position : Coord
         size : Size
         isHidden : boolean
-        -sound : Sound
-        +getSound() : Sound
     }
     Sprite --> Coord
     Sprite --> Size
-    Sprite o-- Sound : can has
     Sprite ..|> IFile
 
     abstract class Sound {
