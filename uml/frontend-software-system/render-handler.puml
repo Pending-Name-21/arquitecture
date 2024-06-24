@@ -3,7 +3,7 @@ package "Render Handler" {
     ' source
     class RenderManager {
         -transmitter: Transmitter
-        -spriteRenderer : SpriteRenderer
+        -spriteRepository: SpriteRepository
         -SoundRepository: SoundRepository
 
         +renderSprites() : void
@@ -11,20 +11,15 @@ package "Render Handler" {
     }
     RenderManager ..> Transmitter: <<uses>>
     RenderManager ..> Frame: <<create>>
-    RenderManager o-- SpriteRenderer : uses
+    RenderManager ..> SpriteRepository: <<uses>>
     RenderManager ..> SoundRepository: <<uses>>
-    RenderManager o-- SpriteFactory : creates sprites
 
-    class SpriteRenderer {
-        -sprites : Sprite[]
-        -spriteFactory : SpriteFactory
-
-        +addSprite(sprite : Sprite) : void
-        +removeSprite(sprite : Sprite) : void
-        +updateSprite(sprite : Sprite, newSprite : Sprite) : void
-        +renderSprite(sprite: Sprite) : void
+    class SpriteRepository {
+        -sprites: Sprite[]
+        +addSprite(sprite: Sprite): void
+        +getSprites(): Sprite[]
     }
-    SpriteRenderer *-- Sprite : manipulates
+    SpriteRepository "1" *-- "1..*" Sprite
 
     class SoundRepository {
         -sounds : Sound[]
@@ -39,7 +34,8 @@ package "Render Handler" {
 
 !startsub INTERFACE
     class SpriteFactory  {
-        +createSprite() : Sprite
+        -repository: SpriteRepository
+        +createSprite(path: String): Sprite
     }
 
     class SoundFactory  {
@@ -48,9 +44,11 @@ package "Render Handler" {
     }
 !endsub
     SpriteFactory ..|> ISpriteFactory
+    SpriteFactory ..> Sprite: <<creates>>
+    SpriteFactory ..> SpriteRepository: <<use>>
 
-    SoundFactory  ..> Sound: <<creates>>
-    SoundFactory  ..> SoundRepository: <<use>>
+    SoundFactory ..> Sound: <<creates>>
+    SoundFactory ..> SoundRepository: <<use>>
 
     ' The message
     class Frame {

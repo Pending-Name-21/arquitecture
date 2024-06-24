@@ -19,8 +19,8 @@ package "Render Handler" {
         size : Size
         isHidden : boolean
     }
-    Sprite --> Coord
-    Sprite --> Size
+    Sprite "1" *-- "1" Coord
+    Sprite "1" *-- "1" Size
     Sprite ..|> IFile
 
     class Sound {
