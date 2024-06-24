@@ -1,32 +1,33 @@
 @startuml
 package "Render Handler" {
     class Coord {
-        x : Integer
-        y : Integer
+        -x: Integer
+        -y: Integer
     }
 
     class Size {
-        height : Double
-        width : Double
+        -height: Double
+        -width: Double
     }
 
     interface IFile {
-        getPath() : String
+        +getPath(): String
     }
 
     class Sprite {
-        position : Coord
-        size : Size
-        isHidden : boolean
+        -position: Coord
+        -size: Size
+        -isHidden: boolean
+        -path: Path
     }
     Sprite "1" *-- "1" Coord
     Sprite "1" *-- "1" Size
     Sprite ..|> IFile
 
     class Sound {
-        isPlaying: boolean
+        -isPlaying: boolean
+        -path: Path
     }
     Sound ..|> IFile
 }
-
 @enduml

@@ -1,31 +1,38 @@
 @startuml
+
+note "T could be Sprite or Sound" as N1
+
 package "Render Handler" {
-    interface Repository {
+    interface IRepository {
         ~add(item: T): void
         ~retrieve(): T[]
     }
-    Repository <|.. SpriteRepository
-    Repository <|.. SoundRepository
+    IRepository <|.. SpriteRepository
+    IRepository <|.. SoundRepository
+    IRepository  .. N1
 
 !startsub INTERFACE
-    interface Factory {
+    abstract class AFactory {
+        -repository: IRepository
+        -filehandler: FileHandler
         +createPiece(path: String): T
     }
-endsub INTERFACE
-    Factory <|.. SpriteFactory
-    Factory <|.. SoundFactory
+!endsub
+    AFactory <|-- SpriteFactory
+    AFactory <|-- SoundFactory
+    AFactory ..> FileHandler: <<uses>>
+    AFactory ..> IRepository: <<uses>>
+    AFactory .. N1
 
     class RenderManager {
         -transmitter: Transmitter
-        -spriteRepository: Repository
-        -SoundRepository: Repository
-
-        +renderSprites() : void
-        +playSounds() : void
+        -spriteRepository: IRepository
+        -SoundRepository: IRepository
+        +render(): void
     }
     RenderManager ..> Transmitter: <<uses>>
     RenderManager ..> Frame: <<create>>
-    RenderManager ..> Repository: <<uses>>
+    RenderManager ..> IRepository: <<uses>>
 
     class SoundRepository {
         -sounds : Sound[]
@@ -33,18 +40,14 @@ endsub INTERFACE
     SoundRepository "1" *-- "1..*" Sound
 
     class SoundFactory  {
-        -soundRepository: Repository
-        +createSound(path: String) : Sound
+        -soundRepository: IRepository
     }
     SoundFactory ..> Sound: <<creates>>
-    SoundFactory ..> Repository: <<use>>
 
     class SpriteFactory  {
-        -spriteRepository: Repository
-        +createSprite(path: String): Sprite
+        -spriteRepository: IRepository
     }
     SpriteFactory ..> Sprite: <<creates>>
-    SpriteFactory ..> Repository: <<use>>
 
     class SpriteRepository {
         -sprites: Sprite[]
