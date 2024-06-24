@@ -23,8 +23,8 @@ package "Render Handler" {
     Sprite --> Size
     Sprite ..|> IFile
 
-    abstract class Sound {
-        {abstract} canPlay() : boolean
+    class Sound {
+        isPlaying: boolean
     }
     Sound ..|> IFile
 }
