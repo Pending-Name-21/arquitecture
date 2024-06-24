@@ -1,43 +1,55 @@
 @startuml
 package "Process Input Handler" {
 !startsub INTERFACE
-  interface IProcessInputSubscriber {
-    +notify(event : EventType) : void
-  }
+    interface IKeyboardInputSubscriber {
+        +doNotify(event: KeyboardEvent) : void
+    }
 
-  class EventType {
-    name : String
-  }
+    interface IMouseInputSubscriber {
+        +doNotify(event: MouseEvent) : void
+    }
 
-  class ProcessInputPublisher {
-    -subscribers : <EventType, IProcessInputSubscriber[]>
+    class KeyboardEvent {
+        state: String
+        name: String
+    }
 
-    +subscribe(event : EventType, subscriber : IProcessInputSubscriber) : void
-    ~getEvents() : List<EventType>
-  }
-  ProcessInputPublisher "1" o-- "*" EventType
-  ProcessInputPublisher "1" o-- "*" IProcessInputSubscriber : notifies subscriptor
+    class MouseEvent {
+        state: String
+        position: MousePosition
+    }
 !endsub
+
+    interface IPublisher {
+        +publish(): void
+    }
+    IPublisher <|.. MouseInputPublisher
+    IPublisher <|.. KeyboardInputPublisher
+
+    class MouseInputPublisher  {
+        -concurrentQueue: MouseEvent[]
+        -subscribers: IMouseInputSubscriber[]
+        +subscribe(subscriber: IMouseInputSubscriber): void
+        +feed(events: MouseEvent[]): void
+    }
+    MouseInputPublisher "1" *-- "many" MouseEvent
+    MouseInputPublisher "1" *-- "many" IMouseInputSubscriber
+
+    class KeyboardInputPublisher {
+        -concurrentQueue: KeyboardEvent[]
+        -subscribers: IKeyboardInputSubscriber[]
+        +subscribe(subscriber: IKeyboardInputSubscriber): void
+        +feed(events: KeyboardEvent[]): void
+    }
+    KeyboardInputPublisher "1" *-- "many" KeyboardEvent
+    KeyboardInputPublisher "1" *-- "many" IKeyboardInputSubscriber
 
   class InputVerifier {
     -processInputPublisher : ProcessInputPublisher
-    -eventBuffers: AEventBuffer[]
-
+    -publishers: IPublisher[]
     +check() : void
   }
-  InputVerifier ..> ProcessInputPublisher: <<uses>>
-  InputVerifier ..> AEventBuffer: <<uses>>
-
-  abstract class AEventBuffer {
-      -buffer: Queue
-      ~consume(): EventType[]
-      +feed(events: EventType[]): void
-  }
-  note right of AEventBuffer::buffer
-    a shared resource between threads
-  end note
-  AEventBuffer <|-- KeyboardBuffer
-  AEventBuffer <|-- MouseBuffer
+  InputVerifier ..> IPublisher: <<uses>>
 }
 @enduml
 

@@ -7,17 +7,21 @@ Server
 '/
     ' The channel
     class SocketServer {
-        -receiever: Receiever
+        -receiver: Receiver
         +start(): void
         +stop(): void
     }
-    SocketServer ..> Receiever: <<uses>>
+    SocketServer ..> Receiver: <<uses>>
 
-    class Receiever {
-        -eventBuffers: AEventBuffer[]
-        +process(data: ByteArray): void
+    class Receiver {
+        -keyboardBuffer: KeyboardInputPublisher
+        -mouseBuffer: MouseInputPublisher
+        ~handleMessage(rawMessage: ByteArray): void
     }
-    Receiever ..> AEventBuffer: <<uses>>
+    Receiver ..> KeyboardEvent: <<creates>>
+    Receiver ..> MouseEvent: <<creates>>
+    Receiver ..> KeyboardInputPublisher: <<uses>>
+    Receiver ..> MouseInputPublisher: <<uses>>
 
 /'
 ------------------------------
