@@ -1,56 +1,56 @@
 @startuml
 package "Render Handler" {
-    ' source
+    interface Repository {
+        ~add(item: T): void
+        ~retrieve(): T[]
+    }
+    Repository <|.. SpriteRepository
+    Repository <|.. SoundRepository
+
+!startsub INTERFACE
+    interface Factory {
+        +createPiece(path: String): T
+    }
+endsub INTERFACE
+    Factory <|.. SpriteFactory
+    Factory <|.. SoundFactory
+
     class RenderManager {
         -transmitter: Transmitter
-        -spriteRepository: SpriteRepository
-        -SoundRepository: SoundRepository
+        -spriteRepository: Repository
+        -SoundRepository: Repository
 
         +renderSprites() : void
         +playSounds() : void
     }
     RenderManager ..> Transmitter: <<uses>>
     RenderManager ..> Frame: <<create>>
-    RenderManager ..> SpriteRepository: <<uses>>
-    RenderManager ..> SoundRepository: <<uses>>
-
-    class SpriteRepository {
-        -sprites: Sprite[]
-        +addSprite(sprite: Sprite): void
-        +getSprites(): Sprite[]
-    }
-    SpriteRepository "1" *-- "1..*" Sprite
+    RenderManager ..> Repository: <<uses>>
 
     class SoundRepository {
         -sounds : Sound[]
-        ~fetchPlayables(): Sound[]
-        ~add(sound: Sound): void
     }
     SoundRepository "1" *-- "1..*" Sound
 
-    interface ISpriteFactory {
-        +createSprite() : Sprite
-    }
-
-!startsub INTERFACE
-    class SpriteFactory  {
-        -repository: SpriteRepository
-        +createSprite(path: String): Sprite
-    }
-
     class SoundFactory  {
-        -repository: SoundRepository
+        -soundRepository: Repository
         +createSound(path: String) : Sound
     }
-!endsub
-    SpriteFactory ..|> ISpriteFactory
-    SpriteFactory ..> Sprite: <<creates>>
-    SpriteFactory ..> SpriteRepository: <<use>>
-
     SoundFactory ..> Sound: <<creates>>
-    SoundFactory ..> SoundRepository: <<use>>
+    SoundFactory ..> Repository: <<use>>
 
-    ' The message
+    class SpriteFactory  {
+        -spriteRepository: Repository
+        +createSprite(path: String): Sprite
+    }
+    SpriteFactory ..> Sprite: <<creates>>
+    SpriteFactory ..> Repository: <<use>>
+
+    class SpriteRepository {
+        -sprites: Sprite[]
+    }
+    SpriteRepository "1" *-- "1..*" Sprite
+
     class Frame {
         -sounds: Sound[]
         -sprites: Sprite[]
