@@ -1,6 +1,7 @@
 @startuml
 skinparam linetype polyline
 
+!include utils.puml
 !include process-input-handler.puml
 !include game-settings.puml
 !include update-handler.puml
@@ -9,3 +10,4 @@ skinparam linetype polyline
 !include render-handler.puml
 !include game-loop.puml
 @enduml
+

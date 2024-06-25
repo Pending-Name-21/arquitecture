@@ -1,33 +1,39 @@
 @startuml
-
-note "T could be Sprite or Sound" as N1
-
 package "Render Handler" {
     interface IRepository {
         ~add(item: T): void
         ~retrieve(): T[]
     }
+    'note top of IRepository : T could be Sprite or Sound
     IRepository <|.. SpriteRepository
     IRepository <|.. SoundRepository
-    IRepository  .. N1
 
-!startsub INTERFACE
-    abstract class AFactory {
-        -repository: IRepository
-        -filehandler: FileHandler
-        +createPiece(path: String): T
+    class SpriteBuilder {
+        -spriteRepository: IRepository
+        -fileHandler: FileHandler
+        +buildCoord(x: int, y: int): SpriteBuilder
+        +buildSize(height: double, width: double): SpriteBuilder
+        +buildPath(filePath: String): SpriteBuilder
+        +assemble(): Sprite
     }
-!endsub
-    AFactory <|-- SpriteFactory
-    AFactory <|-- SoundFactory
-    AFactory ..> FileHandler: <<uses>>
-    AFactory ..> IRepository: <<uses>>
-    AFactory .. N1
+    SpriteBuilder ..> Sprite: <<creates>>
+    SpriteBuilder ..> FileHandler: <<uses>>
+    SpriteBuilder ..> IRepository: <<uses>>
+
+    class SoundBuilder {
+        -soundRepository: IRepository
+        -fileHandler: FileHandler
+        +buildPath(filePath: String): SoundBuilder
+        +assemble(): Sound
+    }
+    SoundBuilder  ..> Sound: <<creates>>
+    SoundBuilder  ..> FileHandler: <<uses>>
+    SoundBuilder  ..> IRepository: <<uses>>
 
     class RenderManager {
         -transmitter: Transmitter
         -spriteRepository: IRepository
-        -SoundRepository: IRepository
+        -soundRepository: IRepository
         +render(): void
     }
     RenderManager ..> Transmitter: <<uses>>
@@ -37,17 +43,8 @@ package "Render Handler" {
     class SoundRepository {
         -sounds : Sound[]
     }
+    'note top of SoundRepository : would retreive only playable sounds
     SoundRepository "1" *-- "1..*" Sound
-
-    class SoundFactory  {
-        -soundRepository: IRepository
-    }
-    SoundFactory ..> Sound: <<creates>>
-
-    class SpriteFactory  {
-        -spriteRepository: IRepository
-    }
-    SpriteFactory ..> Sprite: <<creates>>
 
     class SpriteRepository {
         -sprites: Sprite[]
