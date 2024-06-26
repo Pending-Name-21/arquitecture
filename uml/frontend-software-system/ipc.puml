@@ -14,7 +14,8 @@ Server
     SocketServer ..> Receiver: <<uses>>
 
     class Receiver {
-        -buffers: IEventBuffer[]
+        -eventBuffers: IEventBuffer[]
+        +addBuffer(buffer: IEventBuffer):void
         ~handleMessage(rawMessage: ByteArray): void
     }
     Receiver ..> Event: <<creates>>

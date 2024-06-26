@@ -1,38 +1,22 @@
 @startuml
 package "Process Input Handler" {
-!startsub INTERFACE
-    interface IKeyboardInputSubscriber {
-        +doNotify(event: KeyboardEvent) : void
-    }
-
-    interface IMouseInputSubscriber {
-        +doNotify(event: MouseEvent) : void
-    }
-!endsub
-
     interface IPublisher {
-        +publish(): void
+        ~publish(): void
+        +subscribe(subscriber: IEventSubscriber): void
     }
-    IPublisher <|.. MouseInputPublisher
-    IPublisher <|.. KeyboardInputPublisher
 
-    class MouseInputPublisher  {
-        -concurrentMouseEvents: Mouse[]
-        -subscribers: IMouseInputSubscriber[]
-        +subscribe(subscriber: IMouseInputSubscriber): void
+    interface IEventSubscriber {
+        +doNotify(event: T): void
     }
-    MouseInputPublisher "1" *-- "many" Mouse
-    MouseInputPublisher "1" *-- "many" IMouseInputSubscriber
-    MouseInputPublisher ..|> IEventBuffer
 
-    class KeyboardInputPublisher {
-        -concurentKeyboardEvents: Keyboard[]
-        -subscribers: IKeyboardInputSubscriber[]
-        +subscribe(subscriber: IKeyboardInputSubscriber): void
+    abstract class AEventManager {
+        -concurrentEventsQueue: T[]
+        -subscribers: IEventSubscriber[]
     }
-    KeyboardInputPublisher "1" *-- "many" Keyboard
-    KeyboardInputPublisher "1" *-- "many" IKeyboardInputSubscriber
-    KeyboardInputPublisher ..|> IEventBuffer
+    AEventManager ..> Event: <<uses>>
+    AEventManager "1" *-- "many" IEventSubscriber
+    AEventManager ..|> IEventBuffer
+    AEventManager ..|> IPublisher
 
   class InputVerifier {
     -processInputPublisher : ProcessInputPublisher
