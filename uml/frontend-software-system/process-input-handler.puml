@@ -8,16 +8,6 @@ package "Process Input Handler" {
     interface IMouseInputSubscriber {
         +doNotify(event: MouseEvent) : void
     }
-
-    class KeyboardEvent {
-        state: String
-        name: String
-    }
-
-    class MouseEvent {
-        state: String
-        position: MousePosition
-    }
 !endsub
 
     interface IPublisher {
@@ -27,22 +17,22 @@ package "Process Input Handler" {
     IPublisher <|.. KeyboardInputPublisher
 
     class MouseInputPublisher  {
-        -concurrentQueue: MouseEvent[]
+        -buffer: Buffer
         -subscribers: IMouseInputSubscriber[]
         +subscribe(subscriber: IMouseInputSubscriber): void
-        +feed(events: MouseEvent[]): void
     }
-    MouseInputPublisher "1" *-- "many" MouseEvent
+    MouseInputPublisher "1" *-- "many" Mouse
     MouseInputPublisher "1" *-- "many" IMouseInputSubscriber
+    MouseInputPublisher ..> Buffer: <<uses>>
 
     class KeyboardInputPublisher {
-        -concurrentQueue: KeyboardEvent[]
+        -buffer: Buffer
         -subscribers: IKeyboardInputSubscriber[]
         +subscribe(subscriber: IKeyboardInputSubscriber): void
-        +feed(events: KeyboardEvent[]): void
     }
-    KeyboardInputPublisher "1" *-- "many" KeyboardEvent
+    KeyboardInputPublisher "1" *-- "many" Keyboard
     KeyboardInputPublisher "1" *-- "many" IKeyboardInputSubscriber
+    KeyboardInputPublisher ..> Buffer: <<uses>>
 
   class InputVerifier {
     -processInputPublisher : ProcessInputPublisher
@@ -50,6 +40,18 @@ package "Process Input Handler" {
     +check() : void
   }
   InputVerifier ..> IPublisher: <<uses>>
+
+  class Buffer {
+    -concurentKeyboardEvents: Keyboard[]
+    -concurrentMouseEvents: Mouse[]
+    +add(event: Event): void
+    +getKeyboardEvents(): List<Keyboard>
+    +getKeyboardMouse(): List<Mouse>
+  }
+  Buffer "1" o-- "0..*" Mouse
+  Buffer "1" o-- "0..*" Keyboard
+  Buffer ..> Event: <<uses>>
+
 }
 @enduml
 

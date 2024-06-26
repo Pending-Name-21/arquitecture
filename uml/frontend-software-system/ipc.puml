@@ -18,10 +18,8 @@ Server
         -mouseBuffer: MouseInputPublisher
         ~handleMessage(rawMessage: ByteArray): void
     }
-    Receiver ..> KeyboardEvent: <<creates>>
-    Receiver ..> MouseEvent: <<creates>>
-    Receiver ..> KeyboardInputPublisher: <<uses>>
-    Receiver ..> MouseInputPublisher: <<uses>>
+    Receiver ..> Event: <<creates>>
+    Receiver ..> Buffer: <<uses>>
 
 /'
 ------------------------------
