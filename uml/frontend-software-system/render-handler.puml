@@ -1,72 +1,62 @@
 @startuml
 package "Render Handler" {
-    ' source
+    interface IRepository {
+        ~add(item: T): void
+        ~retrieve(): T[]
+    }
+    'note top of IRepository : T could be Sprite or Sound
+    IRepository <|.. SpriteRepository
+    IRepository <|.. SoundRepository
+
+    class SpriteBuilder {
+        -spriteRepository: IRepository
+        -fileHandler: FileHandler
+        +buildCoord(x: int, y: int): SpriteBuilder
+        +buildSize(height: double, width: double): SpriteBuilder
+        +buildPath(filePath: String): SpriteBuilder
+        +assemble(): Sprite
+    }
+    SpriteBuilder ..> Sprite: <<creates>>
+    SpriteBuilder ..> FileHandler: <<uses>>
+    SpriteBuilder ..> IRepository: <<uses>>
+
+    class SoundBuilder {
+        -soundRepository: IRepository
+        -fileHandler: FileHandler
+        +buildPath(filePath: String): SoundBuilder
+        +assemble(): Sound
+    }
+    SoundBuilder  ..> Sound: <<creates>>
+    SoundBuilder  ..> FileHandler: <<uses>>
+    SoundBuilder  ..> IRepository: <<uses>>
+
     class RenderManager {
         -transmitter: Transmitter
-        -spriteRenderer : SpriteRenderer
-        -soundPlayer : SoundPlayer
-
-        +renderSprites() : void
-        +playSounds() : void
+        -spriteRepository: IRepository
+        -soundRepository: IRepository
+        +render(): void
     }
     RenderManager ..> Transmitter: <<uses>>
     RenderManager ..> Frame: <<create>>
+    RenderManager ..> IRepository: <<uses>>
 
-    class SpriteRenderer {
-        -sprites : Sprite[]
-        -spriteFactory : SpriteFactory
-
-        +addSprite(sprite : Sprite) : void
-        +removeSprite(sprite : Sprite) : void
-        +updateSprite(sprite : Sprite, newSprite : Sprite) : void
-        +renderSprite(sprite: Sprite) : void
-    }
-
-    class SoundPlayer {
+    class SoundRepository {
         -sounds : Sound[]
-        -soundFactory : SoundFactory
-
-        +addSound(sound : Sound) : void
-        +removeSound(sound : Sound) : void
-        +removeSoundFromSprite(sprite : Sprite) : void
-        +playSound(sprite : Sprite) : void
-        +playSound(sound : Sound) : void
     }
+    'note top of SoundRepository : would retreive only playable sounds
+    SoundRepository "1" *-- "1..*" Sound
 
-    interface ISpriteFactory {
-        +createSprite() : Sprite
+    class SpriteRepository {
+        -sprites: Sprite[]
     }
+    SpriteRepository "1" *-- "1..*" Sprite
 
-    interface ISoundFactory {
-        +createSound() : Sound
-    }
-
-!startsub INTERFACE
-    class SpriteFactory  {
-        +createSprite() : Sprite
-    }
-
-    class SoundFactory  {
-        +createSound() : Sound
-    }
-!endsub
-    SpriteFactory ..|> ISpriteFactory
-    SoundFactory ..|> ISoundFactory
-
-    RenderManager o-- SpriteRenderer : uses
-    RenderManager o-- SoundPlayer : uses
-    RenderManager o-- SpriteFactory : creates sprites
-    RenderManager o-- SoundFactory : creates sounds
-    SpriteRenderer *-- Sprite : manipulates
-    SoundPlayer *-- Sound : manipulates
-
-    ' The message
     class Frame {
-        -sound: Sound
-        -sprite: Sprite
+        -sounds: Sound[]
+        -sprites: Sprite[]
     }
-    Frame "1" *-- "many" Sprite
-    Frame "1" *-- "many" Sound
+    Frame "1" *-- "1..*" Sprite
+    Frame "1" *-- "1..*" Sound
 }
 @enduml
 

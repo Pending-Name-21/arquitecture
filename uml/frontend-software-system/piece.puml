@@ -1,35 +1,34 @@
 @startuml
 package "Render Handler" {
     class Coord {
-        x : Integer
-        y : Integer
+        -x: Integer
+        -y: Integer
     }
 
     class Size {
-        height : Double
-        width : Double
+        -height: Double
+        -width: Double
     }
 
     interface IFile {
-        getPath() : String
+        +getPath(): String
     }
 
     class Sprite {
-        position : Coord
-        size : Size
-        isHidden : boolean
-        -sound : Sound
-        +getSound() : Sound
+        -position: Coord
+        -size: Size
+        -isHidden: boolean
+        -path: Path
     }
-    Sprite --> Coord
-    Sprite --> Size
-    Sprite o-- Sound : can has
+    Sprite "1" *-- "1" Coord
+    Sprite "1" *-- "1" Size
     Sprite ..|> IFile
 
-    abstract class Sound {
-        {abstract} canPlay() : boolean
+    class Sound {
+        -isPlaying: boolean
+        -path: Path
     }
     Sound ..|> IFile
 }
-
 @enduml
+
