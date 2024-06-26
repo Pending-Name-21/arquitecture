@@ -17,22 +17,22 @@ package "Process Input Handler" {
     IPublisher <|.. KeyboardInputPublisher
 
     class MouseInputPublisher  {
-        -buffer: Buffer
+        -concurrentMouseEvents: Mouse[]
         -subscribers: IMouseInputSubscriber[]
         +subscribe(subscriber: IMouseInputSubscriber): void
     }
     MouseInputPublisher "1" *-- "many" Mouse
     MouseInputPublisher "1" *-- "many" IMouseInputSubscriber
-    MouseInputPublisher ..> Buffer: <<uses>>
+    MouseInputPublisher ..|> IEventBuffer
 
     class KeyboardInputPublisher {
-        -buffer: Buffer
+        -concurentKeyboardEvents: Keyboard[]
         -subscribers: IKeyboardInputSubscriber[]
         +subscribe(subscriber: IKeyboardInputSubscriber): void
     }
     KeyboardInputPublisher "1" *-- "many" Keyboard
     KeyboardInputPublisher "1" *-- "many" IKeyboardInputSubscriber
-    KeyboardInputPublisher ..> Buffer: <<uses>>
+    KeyboardInputPublisher ..|> IEventBuffer
 
   class InputVerifier {
     -processInputPublisher : ProcessInputPublisher
@@ -40,18 +40,6 @@ package "Process Input Handler" {
     +check() : void
   }
   InputVerifier ..> IPublisher: <<uses>>
-
-  class Buffer {
-    -concurentKeyboardEvents: Keyboard[]
-    -concurrentMouseEvents: Mouse[]
-    +add(event: Event): void
-    +getKeyboardEvents(): List<Keyboard>
-    +getKeyboardMouse(): List<Mouse>
-  }
-  Buffer "1" o-- "0..*" Mouse
-  Buffer "1" o-- "0..*" Keyboard
-  Buffer ..> Event: <<uses>>
-
 }
 @enduml
 
