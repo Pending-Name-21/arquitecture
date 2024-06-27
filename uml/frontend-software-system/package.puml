@@ -2,12 +2,13 @@
 skinparam linetype polyline
 
 !include utils.puml
-!include process-input-handler.puml
 !include game-settings.puml
 !include update-handler.puml
 !include piece.puml
 !include ipc.puml
 !include render-handler.puml
+!include coffee_time_generated.puml
+!include process-input-handler.puml
 !include game-loop.puml
 @enduml
 

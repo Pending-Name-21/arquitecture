@@ -1,0 +1,28 @@
+@startuml
+package "Generated" {
+    class Event {
+        keyboard: Keyboard
+        mouse: Mouse
+    }
+
+    class Keyboard {
+        type: String
+        key: String
+    }
+    Keyboard "1" --o "1" Event
+
+    class Mouse {
+        type: String
+        button: String
+        position: Position
+    }
+    Mouse "1" o-- "1" Position
+    Mouse "1" --o "1" Event
+
+    class Position {
+        x: float
+        y: float
+    }
+}
+@enduml
+

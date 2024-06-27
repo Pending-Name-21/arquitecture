@@ -14,15 +14,16 @@ Server
     SocketServer ..> Receiver: <<uses>>
 
     class Receiver {
-        -keyboardBuffer: KeyboardInputPublisher
-        -mouseBuffer: MouseInputPublisher
+        -eventBuffers: IEventBuffer[]
+        +addBuffer(buffer: IEventBuffer):void
         ~handleMessage(rawMessage: ByteArray): void
     }
-    Receiver ..> KeyboardEvent: <<creates>>
-    Receiver ..> MouseEvent: <<creates>>
-    Receiver ..> KeyboardInputPublisher: <<uses>>
-    Receiver ..> MouseInputPublisher: <<uses>>
+    Receiver ..> Event: <<creates>>
+    Receiver "1" o-- "*" IEventBuffer
 
+    interface IEventBuffer {
+        +feed(event: Event): void
+    }
 /'
 ------------------------------
 Client
