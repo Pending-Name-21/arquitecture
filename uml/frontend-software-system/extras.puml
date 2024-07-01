@@ -1,0 +1,23 @@
+@startuml
+skinparam linetype polyline
+
+package "Render Handler" {
+!includesub render-handler.puml!INTERFACE
+}
+!include game-initializer.puml
+!include update-handler.puml
+
+package extras {
+    class SplashScreen {
+        -sprite: Sprite
+        -sound: Sound
+        -startAnimation():void
+    }
+    SplashScreen <|.. IIinitializerSubscriber
+    SplashScreen <|.. IUpdateSubscriber
+    SplashScreen ..> SpriteBuilder: <<uses>>
+    SplashScreen ..> SoundBuilder: <<uses>>
+}
+
+@enduml
+
