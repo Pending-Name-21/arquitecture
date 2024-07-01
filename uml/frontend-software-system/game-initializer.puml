@@ -1,0 +1,15 @@
+@startuml
+package initialization {
+    class GameInitializer {
+        -subscribers: IIinitializerSubscriber[]
+        +subscribe(subscriber: IIinitializerSubscriber): void
+        +initializeSubscribers(): void
+    }
+    GameInitializer ..> IIinitializerSubscriber: <<uses>>
+
+    interface IIinitializerSubscriber {
+        +init(): void
+    }
+}
+@enduml
+
