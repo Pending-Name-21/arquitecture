@@ -8,6 +8,7 @@ package "Render Handler" {
     IRepository <|.. SpriteRepository
     IRepository <|.. SoundRepository
 
+!startsub INTERFACE
     class SpriteBuilder {
         -spriteRepository: IRepository
         -fileHandler: FileHandler
@@ -16,9 +17,6 @@ package "Render Handler" {
         +buildPath(filePath: String): SpriteBuilder
         +assemble(): Sprite
     }
-    SpriteBuilder ..> Sprite: <<creates>>
-    SpriteBuilder ..> FileHandler: <<uses>>
-    SpriteBuilder ..> IRepository: <<uses>>
 
     class SoundBuilder {
         -soundRepository: IRepository
@@ -26,6 +24,11 @@ package "Render Handler" {
         +buildPath(filePath: String): SoundBuilder
         +assemble(): Sound
     }
+!endsub
+    SpriteBuilder ..> Sprite: <<creates>>
+    SpriteBuilder ..> FileHandler: <<uses>>
+    SpriteBuilder ..> IRepository: <<uses>>
+
     SoundBuilder  ..> Sound: <<creates>>
     SoundBuilder  ..> FileHandler: <<uses>>
     SoundBuilder  ..> IRepository: <<uses>>

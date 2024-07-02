@@ -10,5 +10,6 @@ skinparam linetype polyline
 !include coffee_time_generated.puml
 !include process-input-handler.puml
 !include game-loop.puml
+!include game-initializer.puml
 @enduml
 
